@@ -1,6 +1,6 @@
-# Blez & Yuki — Wedding Invitation
+# Web Wedding Invitation
 
-An online wedding invitation for **Sunday, April 18, 2027 · 4:30 PM** at **Prive by the Sea**.
+An online wedding invitation 
 A small, static site (plain HTML, CSS and JavaScript) with no build step and no dependencies.
 
 ## The experience

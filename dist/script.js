@@ -145,7 +145,7 @@ document.querySelector('#calendarButton').addEventListener('click', () => {
 });
 
 const timeline = document.querySelector('.timeline');
-new IntersectionObserver((entries, obs) => {
+if (timeline) new IntersectionObserver((entries, obs) => {
   entries.forEach((entry) => { if (entry.isIntersecting) { timeline.classList.add('in'); obs.disconnect(); } });
 }, { threshold: .2 }).observe(timeline);
 
@@ -183,7 +183,7 @@ new IntersectionObserver((entries, obs) => {
     '.block .eyebrow', '.script-title',
     '.clock > div', '.onepage .countdown',
     '.details-block .detail-block',
-    '.timeline li',
+    '.tl2 .tl2-text',
     '.onepage .story p:not(.eyebrow)',
     '.rsvp > p:not(.signoff)', '.rsvp-note', '.calendar-button', '.closing-seal', '.signoff'
   ];
@@ -195,7 +195,7 @@ new IntersectionObserver((entries, obs) => {
       // small stagger between siblings of the same group (e.g. countdown boxes, timeline rows)
       const sibs = [...el.parentElement.children].filter((c) => c.matches(sel));
       el.style.setProperty('--sr-delay', `${Math.min(sibs.indexOf(el), 6) * 90}ms`);
-      if (el.matches('.timeline li')) el.classList.add(sibs.indexOf(el) % 2 ? 'sr-from-right' : 'sr-from-left');
+      
       items.push(el);
     });
   });
@@ -455,6 +455,29 @@ new IntersectionObserver((entries, obs) => {
     const atBottom = p >= 0.985;
     if (atBottom && !cheering) { cheering = true; footer.classList.add('cheer'); popHearts(); }
     else if (!atBottom && cheering && p < 0.9) { cheering = false; footer.classList.remove('cheer'); }
+  };
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+})();
+
+// Program timeline: the centre line draws down with scroll; medallions pop in as the line reaches them
+(() => {
+  const tl = document.querySelector('#timeline2');
+  if (!tl) return;
+  const items = [...tl.querySelectorAll('.tl2-item')];
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const r = tl.getBoundingClientRect(), vh = window.innerHeight;
+    const p = Math.min(Math.max((vh * 0.72 - r.top) / r.height, 0), 1);
+    tl.style.setProperty('--tl-p', p.toFixed(4));
+    const reach = r.top + r.height * p;
+    items.forEach((li) => {
+      const node = li.querySelector('.tl2-node').getBoundingClientRect();
+      if (node.top + node.height / 2 <= reach + 2) li.classList.add('on');
+    });
   };
   const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
   window.addEventListener('scroll', onScroll, { passive: true });

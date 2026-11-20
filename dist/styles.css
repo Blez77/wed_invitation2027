@@ -1511,91 +1511,63 @@ html.scroll-locked, html.scroll-locked body { overflow: hidden; height: 100%; ov
   .timeline li:nth-child(even) .tl-text { padding: 0 4px 0 18px; }
 }
 
-/* ===== Animated inline SVG calla lily section dividers (ink draw-in + two-joint coastal breeze sway) ===== */
+/* ===== Fine-line calla lily section dividers (assets/calla-divider.png + silky brush-glide & smooth coastal breeze) ===== */
 .block.has-lily-svg::before { content: none !important; display: none !important; }
 .lily-divider {
   display: block;
-  width: 138px;
-  height: 44px;
+  width: 104px;
+  height: 42px;
   margin: 0 auto 30px;
-  overflow: visible;
   cursor: pointer;
+  transform-origin: 10% 84%;
+  will-change: transform;
 }
-.lily-divider .ld-path {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: var(--len, 120);
-  stroke-dashoffset: var(--len, 120);
-  transition: stroke-dashoffset var(--draw-dur, 1.15s) cubic-bezier(.32, .08, .24, 1) var(--draw-delay, 0s);
-}
-.lily-divider .ld-fill {
+.lily-divider .lily-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   opacity: 0;
-  transition: opacity .85s ease .8s;
+  transform: translate3d(-6px, 2px, 0) scale(.97);
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 42%, transparent 58%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 42%, transparent 58%, transparent 100%);
+  -webkit-mask-size: 260% 100%;
+  mask-size: 260% 100%;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transition:
+    -webkit-mask-position 1.6s cubic-bezier(.22, 1, .36, 1),
+    mask-position 1.6s cubic-bezier(.22, 1, .36, 1),
+    opacity 1.15s cubic-bezier(.22, 1, .36, 1),
+    transform 1.5s cubic-bezier(.22, 1, .36, 1);
+  will-change: transform, opacity;
 }
-.lily-divider.is-drawn .ld-path {
-  stroke-dashoffset: 0;
+.lily-divider.is-drawn .lily-img {
+  opacity: .92;
+  transform: translate3d(0, 0, 0) scale(1);
+  -webkit-mask-position: 0% 0;
+  mask-position: 0% 0;
 }
-.lily-divider.is-drawn .ld-fill {
-  opacity: 1;
+.lily-divider.is-drawn {
+  animation: lilySmoothBreeze var(--sway-dur, 6.8s) cubic-bezier(.45, .05, .55, .95) var(--sway-delay, 1.3s) infinite;
 }
-/* Whole stem + blossom gently sways from the stem base (8, 33) */
-.lily-divider .ld-whole {
-  transform-origin: 8px 33px;
-}
-.lily-divider.is-drawn .ld-whole {
-  animation: lilyStemSway var(--sway-dur, 4.6s) ease-in-out var(--sway-delay, 1.1s) infinite alternate;
-}
-/* Blossom head flexes gracefully at the neck (82, 22) with a natural phase lag */
-.lily-divider .ld-head {
-  transform-origin: 82px 22px;
-}
-.lily-divider.is-drawn .ld-head {
-  animation: lilyHeadFlex var(--sway-dur, 4.6s) ease-in-out calc(var(--sway-delay, 1.1s) + .45s) infinite alternate;
-}
-.lily-divider .ld-spadix {
-  transition: stroke-dashoffset .65s cubic-bezier(.22, 1, .36, 1) .9s, filter .5s ease;
-}
-.lily-divider.is-drawn .ld-spadix {
-  animation: spadixGlow 3.8s ease-in-out 1.6s infinite;
-}
-/* Delicate rising gold pollen mote from the calla lily tip */
-.lily-divider .ld-pollen {
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
-}
-.lily-divider.is-drawn .ld-pollen {
-  animation: pollenFloat var(--pollen-dur, 4.8s) ease-out var(--pollen-delay, 1.8s) infinite;
-}
-.lily-divider:hover .ld-whole,
-.lily-divider:hover .ld-head {
-  animation-duration: 2.2s;
-}
-@keyframes lilyStemSway {
-  0%   { transform: rotate(-2.4deg) translateY(.8px); }
-  50%  { transform: rotate(1.2deg) translateY(-.8px); }
-  100% { transform: rotate(2.8deg) translateY(.3px); }
-}
-@keyframes lilyHeadFlex {
-  0%   { transform: rotate(-3.2deg) scale(1); }
-  50%  { transform: rotate(1.6deg) scale(1.025); }
-  100% { transform: rotate(3.6deg) scale(1); }
-}
-@keyframes spadixGlow {
-  0%, 100% { filter: drop-shadow(0 0 0 rgba(201, 180, 106, 0)); }
-  50%      { filter: drop-shadow(0 0 3.5px rgba(212, 184, 92, .75)); }
-}
-@keyframes pollenFloat {
-  0%   { opacity: 0; transform: translate(0, 0) scale(.5); }
-  18%  { opacity: .85; transform: translate(3px, -5px) scale(1); }
-  70%  { opacity: .55; transform: translate(9px, -14px) scale(.85); }
-  100% { opacity: 0; transform: translate(13px, -20px) scale(.4); }
+@keyframes lilySmoothBreeze {
+  0%, 100% { transform: rotate(0deg) translate3d(0, 0, 0); }
+  25%      { transform: rotate(-1.35deg) translate3d(0, 1px, 0); }
+  50%      { transform: rotate(0.15deg) translate3d(0.6px, -0.4px, 0); }
+  75%      { transform: rotate(1.5deg) translate3d(0, -1.2px, 0); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .lily-divider .ld-path { stroke-dashoffset: 0 !important; transition: none !important; }
-  .lily-divider .ld-fill { opacity: 1 !important; transition: none !important; }
-  .lily-divider .ld-whole, .lily-divider .ld-head, .lily-divider .ld-spadix, .lily-divider .ld-pollen { animation: none !important; }
+  .lily-divider { animation: none !important; }
+  .lily-divider .lily-img {
+    opacity: .92 !important;
+    transform: none !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    transition: none !important;
+  }
 }
 
 /* ===== Closing RSVP note & tactile sage-plaster calendar CTA (no generic wireframe boxes) ===== */

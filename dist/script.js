@@ -660,89 +660,37 @@ new IntersectionObserver((entries, obs) => {
   });
 })();
 
-// Animated inline SVG calla lily dividers: calligraphic ink draw-in on scroll + gentle coastal breeze sway
+// Fine-line calla lily dividers (assets/calla-divider.png): silky brush-glide reveal on scroll + smooth coastal breeze
 (() => {
   const blocks = document.querySelectorAll('.onepage .block');
   if (!blocks.length) return;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const NS = 'http://www.w3.org/2000/svg';
-
-  const makePath = (d, attrs, cls = 'ld-path') => {
-    const p = document.createElementNS(NS, 'path');
-    p.setAttribute('d', d);
-    Object.entries(attrs).forEach(([k, v]) => p.setAttribute(k, v));
-    if (cls) p.setAttribute('class', cls);
-    return p;
-  };
 
   const dividers = [];
   blocks.forEach((block, idx) => {
     block.classList.add('has-lily-svg');
-    const svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('class', 'lily-divider');
-    svg.setAttribute('viewBox', '0 0 132 40');
-    svg.setAttribute('aria-hidden', 'true');
-    svg.style.setProperty('--sway-dur', `${(4.2 + (idx % 3) * 0.6).toFixed(1)}s`);
-    svg.style.setProperty('--sway-delay', `${(1.1 + idx * 0.25).toFixed(2)}s`);
-    svg.style.setProperty('--pollen-dur', `${(4.4 + (idx % 2) * 0.9).toFixed(1)}s`);
-    svg.style.setProperty('--pollen-delay', `${(1.6 + idx * 0.4).toFixed(2)}s`);
+    const wrap = document.createElement('div');
+    wrap.className = 'lily-divider';
+    wrap.setAttribute('aria-hidden', 'true');
+    wrap.style.setProperty('--sway-dur', `${(6.4 + (idx % 3) * 0.7).toFixed(1)}s`);
+    wrap.style.setProperty('--sway-delay', `${(1.2 + idx * 0.2).toFixed(2)}s`);
 
-    const whole = document.createElementNS(NS, 'g');
-    whole.setAttribute('class', 'ld-whole');
+    const img = document.createElement('img');
+    img.className = 'lily-img';
+    img.src = 'assets/calla-divider.png';
+    img.alt = '';
+    img.decoding = 'async';
+    wrap.appendChild(img);
+    block.prepend(wrap);
 
-    // Stems (draw first from left to right)
-    const stem1 = makePath('M6 33C30 30 58 27 82 22', { stroke: '#7fa086', 'stroke-width': '.95' });
-    const stem2 = makePath('M20 35C42 31 66 28 88 24', { stroke: '#7fa086', 'stroke-width': '.7', opacity: '.7' });
-    stem1.style.cssText = '--draw-dur:.9s;--draw-delay:0s';
-    stem2.style.cssText = '--draw-dur:.85s;--draw-delay:.15s';
-    whole.appendChild(stem1);
-    whole.appendChild(stem2);
-
-    // Blossom head group (flexes gently around the neck at 82,22)
-    const head = document.createElementNS(NS, 'g');
-    head.setAttribute('class', 'ld-head');
-
-    const petalFill = makePath('M82 22C88 15 97 8 106 7 114 6 121 10 124 16 118 15 112 16 108 20 103 25 94 26 86 24 Z', { fill: '#eef2e8', stroke: 'none' }, 'ld-fill');
-    const petalLine = makePath('M82 22C88 15 97 8 106 7 114 6 121 10 124 16 118 15 112 16 108 20 103 25 94 26 86 24 Z', { stroke: '#5f8566', 'stroke-width': '.95' });
-    const innerVein = makePath('M106 7C104 12 100 18 95 22', { stroke: '#5f8566', 'stroke-width': '.7', opacity: '.75' });
-    const tipCurl = makePath('M124 16C126 14 127 11 125 9', { stroke: '#5f8566', 'stroke-width': '.8' });
-    const spadix = makePath('M92 21C96 17 101 14 105 13', { stroke: '#c9b46a', 'stroke-width': '1.25' }, 'ld-path ld-spadix');
-
-    petalLine.style.cssText = '--draw-dur:1s;--draw-delay:.45s';
-    innerVein.style.cssText = '--draw-dur:.5s;--draw-delay:.85s';
-    tipCurl.style.cssText = '--draw-dur:.4s;--draw-delay:1.05s';
-    spadix.style.cssText = '--draw-dur:.55s;--draw-delay:.9s';
-
-    // Two tiny golden pollen motes rising softly from the blossom tip
-    const p1 = document.createElementNS(NS, 'circle');
-    p1.setAttribute('class', 'ld-pollen');
-    p1.setAttribute('cx', '108'); p1.setAttribute('cy', '12'); p1.setAttribute('r', '1.2');
-    p1.setAttribute('fill', '#d4b85c');
-    const p2 = document.createElementNS(NS, 'circle');
-    p2.setAttribute('class', 'ld-pollen');
-    p2.setAttribute('cx', '118'); p2.setAttribute('cy', '10'); p2.setAttribute('r', '.95');
-    p2.setAttribute('fill', '#9ab59d');
-    p2.style.setProperty('--pollen-delay', `${(3.2 + idx * 0.4).toFixed(2)}s`);
-
-    head.append(petalFill, petalLine, innerVein, tipCurl, spadix, p1, p2);
-    whole.appendChild(head);
-    svg.appendChild(whole);
-    block.prepend(svg);
-
-    // Measure exact path lengths for seamless stroke-dashoffset ink draw-in
-    svg.querySelectorAll('.ld-path').forEach((p) => {
-      const len = Math.ceil(p.getTotalLength() || 120);
-      p.style.setProperty('--len', String(len));
-    });
-
-    // Tap/click to re-draw & release a tiny golden pollen shimmer
-    svg.addEventListener('click', () => {
+    // Tap/click to smoothly replay the brush-glide reveal & release subtle sparkles
+    wrap.addEventListener('click', () => {
       if (reduce) return;
-      svg.classList.remove('is-drawn');
-      void svg.getBoundingClientRect();
-      svg.classList.add('is-drawn');
-      const r = svg.getBoundingClientRect();
-      const cx = r.left + r.width * 0.78, cy = r.top + r.height * 0.42;
+      wrap.classList.remove('is-drawn');
+      void wrap.getBoundingClientRect();
+      requestAnimationFrame(() => wrap.classList.add('is-drawn'));
+      const r = wrap.getBoundingClientRect();
+      const cx = r.left + r.width * 0.72, cy = r.top + r.height * 0.42;
       for (let i = 0; i < 6; i++) {
         const el = document.createElement('span');
         el.className = 'burst ' + (i % 2 === 0 ? 'burst-gold' : 'burst-petal');
@@ -757,11 +705,11 @@ new IntersectionObserver((entries, obs) => {
       }
     });
 
-    dividers.push(svg);
+    dividers.push(wrap);
   });
 
   if (reduce) {
-    dividers.forEach((svg) => svg.classList.add('is-drawn'));
+    dividers.forEach((d) => d.classList.add('is-drawn'));
     return;
   }
 
@@ -774,7 +722,7 @@ new IntersectionObserver((entries, obs) => {
   }, { rootMargin: '0px 0px -6% 0px', threshold: 0.2 });
 
   const invitation = document.querySelector('#invitation');
-  const start = () => dividers.forEach((svg) => io.observe(svg));
+  const start = () => dividers.forEach((d) => io.observe(d));
   if (invitation && (invitation.classList.contains('revealed') || !document.querySelector('#opening'))) start();
   else if (invitation) new MutationObserver((m, mo) => {
     if (invitation.classList.contains('revealed')) { mo.disconnect(); setTimeout(start, 300); }

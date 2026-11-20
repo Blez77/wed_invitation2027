@@ -2248,3 +2248,9 @@ html[lang="ja"] .details-pair .detail-block p {
 
 /* Same-venue note under the directions link */
 .hero .venue-note { margin: 10px auto 0; font: italic 400 .98rem/1.5 "Cormorant Garamond", serif !important; letter-spacing: .02em; color: #6c6a60; text-align: center; }
+
+/* "I do" emphasised in the countdown line */
+.onepage .countdown { text-transform: none !important; }
+.countdown .i-do { font: italic 500 1.55em/1 "Cormorant Garamond", serif; color: #4f6f55; letter-spacing: .03em; margin-left: .12em;
+  background: linear-gradient(transparent 70%, rgba(201,180,106,.35) 70%, rgba(201,180,106,.35) 88%, transparent 88%); padding: 0 .12em; }
+

@@ -193,7 +193,7 @@ function updateCountdown() {
   if (lblMonths) lblMonths.textContent = isJa ? 'ヶ月' : (months === 1 ? 'Month' : 'Months');
   if (lblDays) lblDays.textContent = isJa ? '日' : (days === 1 ? 'Day' : 'Days');
 
-  countdown.textContent = isJa ? '誓いの日まであと' : 'until we say I do';
+  countdown.innerHTML = isJa ? '<em class="i-do">誓い</em>の日まであと' : 'until we say <em class="i-do">I do</em>';
   return true;
 }
 if (updateCountdown()) setInterval(updateCountdown, 60000);
@@ -883,7 +883,7 @@ new IntersectionObserver((entries, obs) => {
       tl6: '夜食・軽食',
       tl7: 'お見送り',
       feelEyebrow: '当日の雰囲気',
-      feelBody: '自然のぬくもり、柔らかなキャンドルの灯り、海風とともに、<br />大切な皆さまと過ごす穏やかな時間。',
+      feelBody: '温かなキャンドルの灯り、海風、そしてゆったりと過ごすひととき。',
       closingLead: '皆さまとお祝いできる日を心より楽しみにしております。',
       rsvpNote: '<span class="mini-label">ご出欠のご連絡</span>メッセージへ <b>出席</b> または <b>欠席</b> とご返信ください。',
       calendarBtn: 'カレンダーに予定を追加',

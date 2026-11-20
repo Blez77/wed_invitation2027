@@ -2074,49 +2074,137 @@ html[lang="ja"] .onepage .signoff i {
   letter-spacing: .14em;
 }
 
-/* Refined centerpiece couple names (light italic Cormorant from 80f576b + Playfair italic sage &) */
+/* ===== Minimalist wedding typography from origin/main (80f576b) ===== */
+.onepage { color: #3b3b36; }
+
+/* Names centerpiece: Cormorant Garamond light italic + upright classic sage ampersand */
 .hero-names,
 html[lang="ja"] .hero-names {
   font-family: "Cormorant Garamond", serif !important;
   font-style: italic !important;
   font-weight: 300 !important;
-  font-size: clamp(3.3rem, 12.5vw, 4.6rem) !important;
-  line-height: 1.04 !important;
+  font-size: clamp(3.6rem, 14vw, 5rem) !important;
+  line-height: 1.05 !important;
   letter-spacing: .02em !important;
   color: #2f2f2b;
-  margin: 8px 0 12px !important;
+  text-transform: none;
+  margin: 10px 0 14px !important;
 }
-.signoff span,
-html[lang="ja"] .signoff span {
+.onepage .signoff span,
+html[lang="ja"] .onepage .signoff span {
   font-family: "Cormorant Garamond", serif !important;
   font-style: italic !important;
   font-weight: 300 !important;
-  font-size: 1.95rem !important;
+  font-size: 2rem !important;
   line-height: 1.1 !important;
+  text-transform: none !important;
   letter-spacing: .02em !important;
   color: #2f2f2b;
 }
 .hero-names em,
-.signoff em,
+.onepage .signoff span em,
 html[lang="ja"] .hero-names em,
-html[lang="ja"] .signoff em {
-  font-family: "Playfair Display", Georgia, serif !important;
-  font-style: italic !important;
-  font-weight: 400 !important;
-  font-size: 0.78em;
+html[lang="ja"] .onepage .signoff span em {
+  font-family: "Cormorant Garamond", serif !important;
+  font-style: normal !important;
+  font-weight: 300 !important;
+  font-size: .78em !important;
   line-height: 1;
-  color: #5f7a63;
-  margin: 0 .14em 0 .1em;
-  vertical-align: .02em;
+  color: #5f7a63 !important;
+  vertical-align: .06em;
+  margin: 0 .14em !important;
   display: inline-block;
   letter-spacing: 0 !important;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, .65);
 }
-/* Crisper mini-label contrast from 80f576b */
-.mini-label {
+
+/* Invitation lines: matching light italic Cormorant Garamond (EN) */
+.hero h2#inviteTitle,
+.hero .hero-sub {
+  font: italic 300 1.22rem/1.45 "Cormorant Garamond", serif !important;
+  letter-spacing: .03em;
+  color: #3b3b36;
+  margin: 0;
+}
+.hero h2#inviteTitle { margin-top: 2px; }
+@media (max-width: 520px) {
+  .hero h2#inviteTitle, .hero .hero-sub { font-size: 1.12rem !important; }
+}
+html[lang="ja"] .hero h2#inviteTitle {
+  font-family: "EditorialNums", "Cormorant Garamond", "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: clamp(1.08rem, 4.1vw, 1.32rem) !important;
+  line-height: 1.75 !important;
+  letter-spacing: .06em;
+}
+html[lang="ja"] .hero .hero-sub {
+  font-family: "EditorialNums", "Cormorant Garamond", "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: .92rem !important;
+  letter-spacing: .06em;
+  margin-top: 6px;
+}
+
+/* Section headings: light, airy, widely spaced capitals */
+.script-title,
+.onepage .story h2.script-title,
+.onepage .rsvp h2.script-title {
+  font-weight: 300 !important;
+  font-size: clamp(1.35rem, 5.6vw, 1.75rem) !important;
+  letter-spacing: .24em !important;
+  color: #3b3b36 !important;
+}
+.script-title i {
+  font-weight: 300;
+  font-size: .62em;
+  letter-spacing: .06em;
+  color: #8a887e;
+}
+
+/* Mini labels & eyebrows: bolder, crisp sage caps */
+.mini-label,
+.onepage .eyebrow {
   font-weight: 600 !important;
-  color: #5a6d5e !important;
+  font-size: .74rem !important;
+  color: #5f7563 !important;
+  letter-spacing: .34em !important;
 }
+.hero-date {
+  font-weight: 400 !important;
+  letter-spacing: .3em !important;
+  color: #3b3b36;
+}
+.hero .venue-map-link span:first-child {
+  font-weight: 400;
+  letter-spacing: .12em;
+}
+
+/* Body text & notes: regular weight, softer ink, more air */
+.details-block .detail-block p,
+.onepage .story p:not(.eyebrow),
+.onepage .rsvp > p:not(.rsvp-note):not(.signoff):not(.card-foot),
+.rsvp-note {
+  font-weight: 400;
+  color: #45453f;
+  line-height: 1.75;
+  letter-spacing: .015em;
+}
+.details-block .weather-note {
+  border-top: 0 !important;
+  padding-top: 0 !important;
+  margin: 6px auto 0 !important;
+  font-style: italic !important;
+  font-size: .92rem !important;
+  line-height: 1.5 !important;
+  color: #85847a !important;
+  letter-spacing: .02em;
+}
+.clock b { font-weight: 400 !important; }
+.timeline time { font-weight: 400 !important; letter-spacing: .08em; }
+.timeline b { font-weight: 500 !important; letter-spacing: .24em; font-size: .64rem !important; color: #6f7a70; }
+.onepage .calendar-button { font-weight: 500 !important; letter-spacing: .3em; font-size: .66rem !important; }
+.onepage .story p:not(.eyebrow) { text-wrap: balance; }
 
 /* Animated single-line wedding rings flourish */
 svg.rings-art {

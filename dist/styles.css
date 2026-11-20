@@ -712,9 +712,34 @@ h1 { margin: 14px 0 6px; font-family: Cormorant Garamond, serif; font-weight: 50
 .closing-seal { margin-top: 40px !important; }
 @media (max-width: 520px) { .onepage .story { padding-top: 46px; } }
 
-/* ===== Save-the-date typography: Cormorant Garamond only ===== */
-.onepage, .onepage * { font-family: "Cormorant Garamond", "EB Garamond", Garamond, Georgia, serif !important; }
-.onepage { font-variant-numeric: oldstyle-nums; color: #2b2b28; }
+/* ===== Save-the-date typography: Cormorant Garamond + Cormorant Infant lining numerals (U+0030-0039) ===== */
+@font-face {
+  font-family: "EditorialNums";
+  src: url("assets/cormorant-nums-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  unicode-range: U+0030-0039;
+  font-display: block;
+}
+@font-face {
+  font-family: "EditorialNums";
+  src: url("assets/cormorant-nums-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  unicode-range: U+0030-0039;
+  font-display: block;
+}
+@font-face {
+  font-family: "EditorialNums";
+  src: url("assets/cormorant-nums-600.woff2") format("woff2");
+  font-weight: 600 700;
+  font-style: normal;
+  unicode-range: U+0030-0039;
+  font-display: block;
+}
+.onepage, .onepage * { font-family: "EditorialNums", "Cormorant Garamond", "EB Garamond", Garamond, Georgia, serif !important;
+  font-variant-numeric: lining-nums; font-feature-settings: "lnum" 1; }
+.onepage { font-variant-numeric: lining-nums; font-feature-settings: "lnum" 1; color: #2b2b28; }
 
 /* headings: spaced caps with small grey italic connectors, like "SAVE the DATE" */
 .script-title, .onepage .story h2.script-title, .onepage .rsvp h2.script-title {
@@ -807,7 +832,8 @@ h1 { margin: 14px 0 6px; font-family: Cormorant Garamond, serif; font-weight: 50
   will-change: opacity, transform; }
 .sr-ready .timeline li.sr-from-left { transform: translate3d(-14px, 8px, 0); }
 .sr-ready .timeline li.sr-from-right { transform: translate3d(14px, 8px, 0); }
-.sr-ready [data-sr].sr-in { opacity: 1; transform: none; filter: none; }
+.sr-ready [data-sr].sr-in,
+.sr-ready .timeline li.sr-in { opacity: 1; transform: none; filter: none; }
 @media (prefers-reduced-motion: reduce) { .sr-ready [data-sr] { opacity: 1; transform: none; filter: none; transition: none; } }
 
 /* Envelope gold flakes: each one floats, turns and catches the light on its own rhythm */
@@ -997,155 +1023,1165 @@ h1 { margin: 14px 0 6px; font-family: Cormorant Garamond, serif; font-weight: 50
 /* No scrolling while the envelope is closed */
 html.scroll-locked, html.scroll-locked body { overflow: hidden; height: 100%; overscroll-behavior: none; }
 
-/* Invitation lines: one matching style, like the reference card */
-.hero h2#inviteTitle, .hero .hero-sub { font: italic 400 1.22rem/1.45 "Cormorant Garamond", serif !important; letter-spacing: .02em; color: #2b2b28; margin: 0; }
-.hero h2#inviteTitle { margin-top: 2px; }
-@media (max-width: 520px) { .hero h2#inviteTitle, .hero .hero-sub { font-size: 1.12rem !important; } }
-@media (max-width: 480px) { .details-block .one-line { white-space: normal; text-wrap: balance; } }
-
-/* Section divider: the fine-line calla lily illustration */
-.block::before { width: 120px; height: 48px; margin: 0 auto 32px; opacity: 1;
-  background: url("assets/calla-divider.png") center / contain no-repeat; }
-.block::before { width: 90px; height: 36px; }
-
-/* ===== Minimalist wedding typography: lighter weights, airier spacing, softer ink ===== */
-.onepage { color: #3b3b36; }
-/* section headings: light, small, widely spaced capitals */
-.script-title, .onepage .story h2.script-title, .onepage .rsvp h2.script-title {
-  font-weight: 300 !important; font-size: clamp(1.35rem, 5.6vw, 1.75rem) !important; letter-spacing: .24em !important; color: #3b3b36 !important; }
-.script-title i { font-weight: 300; font-size: .62em; letter-spacing: .06em; color: #8a887e; }
-/* names: light and elegant */
-.hero-names { font-weight: 300 !important; letter-spacing: .08em; color: #2f2f2b; }
-.hero-names em, .signoff em { font-weight: 300; }
-/* invitation lines: light italic */
-.hero h2#inviteTitle, .hero .hero-sub { font-weight: 300 !important; color: #3b3b36; letter-spacing: .03em; }
-/* labels: tiny spaced caps in sage */
-.onepage .eyebrow, .mini-label { font-size: .68rem !important; letter-spacing: .38em !important; font-weight: 500 !important; color: #7d8f80 !important; }
-.hero-date { font-weight: 400 !important; letter-spacing: .3em !important; color: #3b3b36; }
-.hero .venue-map-link span:first-child { font-weight: 400; letter-spacing: .12em; }
-/* body text: regular weight, softer, more air */
-.details-block .detail-block p, .onepage .story p:not(.eyebrow), .onepage .rsvp > p:not(.rsvp-note):not(.signoff):not(.card-foot), .rsvp-note { font-weight: 400; color: #45453f; line-height: 1.75; letter-spacing: .015em; }
-/* numbers and timeline: lighter */
-.clock b { font-weight: 400 !important; }
-.timeline time { font-weight: 400 !important; letter-spacing: .08em; }
-.timeline b { font-weight: 500 !important; letter-spacing: .24em; font-size: .64rem !important; color: #6f7a70; }
-.onepage .calendar-button { font-weight: 500 !important; letter-spacing: .3em; font-size: .66rem !important; }
-.onepage .signoff span { font-weight: 300 !important; letter-spacing: .08em; }
-
-/* Weather line reads as a small note under the dress code */
-.details-block .weather-note { border-top: 0 !important; padding-top: 0 !important; margin: 6px auto 0 !important;
-  font-style: italic !important; font-size: .92rem !important; line-height: 1.5 !important; color: #85847a !important; letter-spacing: .02em; }
-
-/* Mini labels: a touch bolder, larger and darker sage so they read clearly */
-.mini-label, .onepage .eyebrow { font-weight: 600 !important; font-size: .74rem !important; color: #5f7563 !important; letter-spacing: .34em !important; }
-
-/* ===== Bonding rings: two halves glide together and lock, then a soft glint ===== */
-.rings-bond { position: relative; width: 240px; aspect-ratio: 630 / 110; height: auto; margin: -6px auto 18px; opacity: 1; }
-.rb-half { position: absolute; inset: 0; background: url("assets/rings-lineart.png") center / 100% 100% no-repeat; opacity: .85;
-  transition: transform 1.8s cubic-bezier(.22,1,.36,1) .25s, opacity 1.2s ease .25s; }
-.rb-left  { clip-path: inset(0 50% 0 0); transform: translateX(-46px); opacity: 0; }
-.rb-right { clip-path: inset(0 0 0 50%); transform: translateX(46px);  opacity: 0; }
-.rings-bond.sr-in .rb-half { transform: none; opacity: .85; }
-.rb-glint { position: absolute; left: 50%; top: 42%; width: 46px; height: 46px; translate: -50% -50%; border-radius: 50%; pointer-events: none; opacity: 0;
-  background: radial-gradient(circle, rgba(255,240,190,.95) 0, rgba(232,200,120,.55) 22%, rgba(232,200,120,0) 62%); }
-.rings-bond.sr-in .rb-glint { animation: ringGlint 1.4s ease-out 1.8s both; }
-@keyframes ringGlint { 0% { opacity: 0; transform: scale(.4); } 35% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.5); } }
-/* the wrapper itself shouldn't do the generic rise/blur reveal */
-.sr-ready .rings-bond[data-sr] { transform: none; filter: none; opacity: 1; }
-@media (max-width: 520px) { .rings-bond { width: 210px; } .rb-left { transform: translateX(-36px); } .rb-right { transform: translateX(36px); } }
-@media (prefers-reduced-motion: reduce) { .rb-half { transition: none; transform: none !important; opacity: .85 !important; } .rb-glint { display: none; } }
-
-/* Rings: whole image, revealed from the centre outward (rings first, then the line unfurls) */
-.rb-line { position: absolute; inset: 0; background: url("assets/rings-lineart.png") center / 100% 100% no-repeat; opacity: 0;
-  clip-path: inset(0 41% 0 41%); transform: scale(.94);
-  transition: opacity .9s ease .2s, transform 1.2s cubic-bezier(.22,1,.36,1) .2s, clip-path 2.2s cubic-bezier(.65,0,.35,1) .9s; }
-.rings-bond.sr-in .rb-line { opacity: .85; transform: none; clip-path: inset(0 0 0 0); }
-.rings-bond.sr-in .rb-glint { animation: ringGlint 1.4s ease-out .7s both; }
-@media (prefers-reduced-motion: reduce) { .rb-line { transition: none; opacity: .85; clip-path: none; transform: none; } }
-
-/* Rings stay put in the centre; only the curling line draws outward from them */
-.rb-rings { position: absolute; inset: 0; background: url("assets/rings-lineart.png") center / 100% 100% no-repeat; opacity: .85; clip-path: inset(0 25% 0 36%); }
-.rb-line { opacity: .85 !important; transform: none !important; clip-path: inset(0 25% 0 36%);
-  transition: clip-path 2.4s cubic-bezier(.65,0,.35,1) .5s !important; }
-.rings-bond.sr-in .rb-line { clip-path: inset(0 0 0 0); }
-.rb-glint { left: 55%; }
-.rings-bond.sr-in .rb-glint { animation: ringGlint 1.4s ease-out .3s both; }
-@media (prefers-reduced-motion: reduce) { .rb-line { clip-path: none !important; transition: none !important; } }
-
-.rb-glint { display: none !important; }
-
-/* Line starts drawing immediately */
-.rb-line { transition: clip-path 1.8s cubic-bezier(.33,0,.2,1) 0s !important; }
-
-/* Couple names in a signature-style script, stacked like the reference */
-.hero-names.hero-names-script { display: grid; justify-items: center; margin: 4px 0 6px !important; line-height: 1; letter-spacing: 0 !important; }
-.hero-names-script .nm { font-family: "Ms Madi", "Hurricane", cursive !important; font-weight: 400 !important; font-size: clamp(4rem, 17vw, 5.6rem); line-height: .9; color: #2f2f2b; letter-spacing: 0; }
-.hero-names-script .nm-1 { translate: -14% 0; }
-.hero-names-script .nm-2 { translate: 16% -6px; margin-top: -10px; }
-.hero-names-script .nm-and { font-family: "Cormorant Garamond", serif !important; font-size: .62rem; font-weight: 500; letter-spacing: .32em; text-transform: uppercase; color: #6f7a70; margin: -6px 0 0; translate: -8% 0; }
-@media (max-width: 520px) { .hero-names-script .nm { font-size: clamp(3.4rem, 18vw, 4.4rem); } }
-
-/* Sign-off names in the same signature script */
-.onepage .signoff span { font-family: "Ms Madi", "Hurricane", cursive !important; font-weight: 400 !important; font-size: 2.6rem !important; line-height: 1.05; letter-spacing: 0 !important; color: #2f2f2b; }
-.onepage .signoff span em { font-family: "Ms Madi", "Hurricane", cursive !important; font-style: normal; color: #2f2f2b; margin: 0 .08em; }
-
-/* Names: elegant high-contrast serif capitals with a small script "and" (like the reference) */
-.hero-names-script .nm { font-family: "Bodoni Moda", "Cormorant Garamond", serif !important; font-weight: 400 !important; font-size: clamp(2.5rem, 10vw, 3.4rem);
-  text-transform: uppercase; letter-spacing: .06em; line-height: 1; translate: none !important; margin: 0 !important; color: #2b2b28; }
-.hero-names-script .nm-and { font-family: "Ms Madi", cursive !important; font-size: clamp(1.9rem, 7vw, 2.4rem); font-weight: 400; letter-spacing: 0;
-  text-transform: none; color: #2b2b28; margin: -2px 0 -4px; translate: none; line-height: 1; }
-.hero-names.hero-names-script { gap: 0; margin: 8px 0 10px !important; }
-@media (max-width: 520px) { .hero-names-script .nm { font-size: clamp(2.2rem, 11vw, 2.8rem); } }
-
-/* Sign-off: same pairing */
-.onepage .signoff span { font-family: "Bodoni Moda", serif !important; font-size: 1.35rem !important; text-transform: uppercase; letter-spacing: .08em !important; }
-.onepage .signoff span em { font-family: "Ms Madi", cursive !important; text-transform: none; font-size: 1.5em; letter-spacing: 0; margin: 0 .2em; vertical-align: -.08em; }
-
-/* Names in the card's own typeface: Cormorant Garamond light italic, sage ampersand */
-.hero-names.hero-names-serif { display: block; margin: 6px 0 12px !important; font: italic 300 clamp(2.9rem, 11vw, 3.8rem)/1.05 "Cormorant Garamond", serif !important;
-  letter-spacing: .02em !important; color: #2f2f2b; text-transform: none; }
-.hero-names-serif em { font-style: italic; font-weight: 300; color: #5f7a63; margin: 0 .08em; font-size: .9em; }
-.onepage .signoff span { font: italic 300 2rem/1.1 "Cormorant Garamond", serif !important; text-transform: none !important; letter-spacing: .02em !important; color: #2f2f2b; }
-.onepage .signoff span em { font-family: "Cormorant Garamond", serif !important; font-style: italic; font-weight: 300; font-size: .9em; color: #5f7a63; margin: 0 .06em; vertical-align: 0; }
-
-/* Names as the centrepiece: larger */
-.hero-names.hero-names-serif { font-size: clamp(3.6rem, 14vw, 5rem) !important; margin: 10px 0 14px !important; }
-
-/* Ampersand: upright classic form, same sage colour */
-.hero-names-serif em, .onepage .signoff span em { font-style: normal !important; font-weight: 300 !important; font-size: .78em !important; color: #5f7a63 !important;
-  vertical-align: .06em; margin: 0 .14em !important; }
-
-/* ===== Program timeline v2: continuous centre line, icon medallions, alternating text ===== */
-.tl2 { --tl-p: 0; position: relative; list-style: none; margin: 8px auto 0; padding: 6px 0; max-width: 460px; }
-.tl2::before, .tl2::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; translate: -50% 0; }
-.tl2::before { background: rgba(95,122,99,.18); }
-.tl2::after { background: linear-gradient(#7d927e, #5f7a63); transform-origin: top; transform: scaleY(var(--tl-p)); }
-.tl2-item { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 56px 1fr; align-items: center; column-gap: 22px; padding: 14px 0; }
-.tl2-node { grid-column: 2; grid-row: 1; width: 48px; height: 48px; margin: 0 auto; border-radius: 50%; display: grid; place-items: center;
-  background: #f5f4ef; border: 1px solid rgba(95,122,99,.45); box-shadow: 0 4px 10px -4px rgba(40,55,44,.25), 0 0 0 5px rgba(245,244,239,.9);
-  transform: scale(.55); opacity: 0; transition: transform .7s cubic-bezier(.34,1.56,.64,1), opacity .5s ease, background .5s ease; }
-.tl2-node svg { width: 24px; height: 24px; fill: none; stroke: #5f7a63; stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
-.tl2-node svg * { vector-effect: non-scaling-stroke; }
-.tl2-item.on .tl2-node { transform: scale(1); opacity: 1; }
-.tl2-text { grid-row: 1; display: grid; gap: 4px; }
-.tl2-left .tl2-text { grid-column: 1; text-align: right; justify-items: end; }
-.tl2-right .tl2-text { grid-column: 3; text-align: left; justify-items: start; }
-.tl2-text time { font: 400 1.32rem/1 "Cormorant Garamond", serif !important; letter-spacing: .06em; color: #2f2f2b; }
-.tl2-text time small { font-size: .62em; letter-spacing: .14em; }
-.tl2-label { font: 500 .66rem/1.5 "Cormorant Garamond", serif !important; letter-spacing: .26em; text-transform: uppercase; color: #6f7a70; }
-/* text glides in from its own side once revealed */
-.sr-ready .tl2-left .tl2-text[data-sr] { transform: translate3d(-18px, 0, 0); }
-.sr-ready .tl2-right .tl2-text[data-sr] { transform: translate3d(18px, 0, 0); }
-.sr-ready .tl2 .tl2-text[data-sr].sr-in { transform: none; }
-/* small end caps on the line */
-.tl2 > .tl2-item:first-child::before, .tl2 > .tl2-item:last-child::after { content: ""; position: absolute; left: 50%; width: 5px; height: 5px; translate: -50% 0; border-radius: 50%; background: #7d927e; }
-.tl2 > .tl2-item:first-child::before { top: -6px; }
-.tl2 > .tl2-item:last-child::after { bottom: -6px; }
-@media (max-width: 520px) {
-  .tl2-item { grid-template-columns: 1fr 48px 1fr; column-gap: 14px; padding: 12px 0; }
-  .tl2-node { width: 42px; height: 42px; } .tl2-node svg { width: 21px; height: 21px; }
-  .tl2-text time { font-size: 1.15rem !important; } .tl2-label { font-size: .6rem !important; letter-spacing: .2em; }
+/* ===== Living wedding celebration overlay on the venue illustration ===== */
+.hero-stage { position: relative; width: 92%; margin: 0 auto; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.hero-stage > img { display: block; width: 100%; margin: 0; transition: opacity .6s ease; }
+.hero-stage.has-video > img { opacity: 0; }
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  transition: opacity .8s ease;
 }
-@media (prefers-reduced-motion: reduce) { .tl2::after { transform: none; } .tl2-node { transform: none; opacity: 1; transition: none; } }
+.hero-video.is-ready { opacity: 1; }
+.hero-video[hidden] { display: none; }
+.venue-life { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 2; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-video { display: none !important; }
+  .hero-stage.has-video > img { opacity: 1 !important; }
+}
 
-.onepage .story p:not(.eyebrow) { text-wrap: balance; }
+/* Warm twinkling string lights & ceiling downlights */
+.venue-sparkle { position: absolute; width: var(--sz, 5px); height: var(--sz, 5px); border-radius: 50%; translate: -50% -50%;
+  background: radial-gradient(circle, #fffdf4 0%, #ffe699 45%, rgba(235,180,68,0) 75%);
+  box-shadow: 0 0 8px 2px rgba(255, 220, 125, .65);
+  opacity: 0; animation: venueTwinkle var(--dur, 3.2s) ease-in-out var(--delay, 0s) infinite; }
+@keyframes venueTwinkle {
+  0%, 100% { opacity: .22; transform: scale(.75); }
+  50%      { opacity: .95; transform: scale(1.35); }
+}
+
+/* Rising celebration motes (tiny hearts, champagne bubbles, soft music notes) above guests */
+.venue-mote { position: absolute; translate: -50% -50%; opacity: 0;
+  animation: moteRise var(--dur, 4.8s) cubic-bezier(.25,.8,.4,1) var(--delay, 0s) infinite; }
+.venue-mote.mote-heart { width: 7px; height: 7px; background: var(--mc, #c95b58);
+  clip-path: path('M3.5 6.3 C.7 4.2 0 2.8 0 1.8 C0 .7 .9 0 1.8 0 C2.5 0 3.1 .4 3.5 1.1 C3.9 .4 4.5 0 5.2 0 C6.1 0 7 .7 7 1.8 C7 2.8 6.3 4.2 3.5 6.3 Z'); }
+.venue-mote.mote-note { font: 600 10px/1 "Cormorant Garamond", serif; color: #7a6633; text-shadow: 0 0 4px rgba(255,248,225,.9); }
+.venue-mote.mote-clink { width: 4px; height: 4px; border-radius: 50%;
+  background: radial-gradient(circle, #fffef6 15%, #e6c15c 70%, rgba(230,193,92,0) 100%);
+  box-shadow: 0 0 5px rgba(240, 200, 95, .8); }
+@keyframes moteRise {
+  0%   { opacity: 0; transform: translate3d(0, 4px, 0) scale(.55); }
+  20%  { opacity: var(--op, .82); transform: translate3d(calc(var(--dx, 6px) * .4), -4px, 0) scale(1); }
+  65%  { opacity: var(--op, .82); transform: translate3d(var(--dx, 6px), -14px, 0) scale(.95); }
+  100% { opacity: 0; transform: translate3d(calc(var(--dx, 6px) * 1.25), -22px, 0) scale(.7); }
+}
+
+/* Pool water shimmer glints */
+.pool-gleam { position: absolute; height: 2px; border-radius: 999px; translate: -50% -50%;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,252,238,.85), rgba(255,255,255,0));
+  opacity: 0; animation: poolShimmer var(--dur, 4.2s) ease-in-out var(--delay, 0s) infinite; }
+@keyframes poolShimmer {
+  0%, 100% { opacity: 0; transform: translateX(-8px) scaleX(.6); }
+  50%      { opacity: .75; transform: translateX(8px) scaleX(1.15); }
+}
+
+@media (prefers-reduced-motion: reduce) { .venue-life { display: none; } }
+
+/* ===== Letterpress ivory flip-calendar cards (Months & Days only) ===== */
+.clock.clock-cards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(16px, 4.6vw, 28px);
+  max-width: 400px;
+  margin: 12px auto 0;
+  padding: 6px 0 8px;
+  border: 0;
+  position: relative;
+}
+.clock.clock-cards::before,
+.clock.clock-cards::after { content: none; }
+
+.clock .cal-card {
+  position: relative;
+  flex: 0 0 auto;
+  width: 132px !important;
+  min-width: 0 !important;
+  height: 152px !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(125, 146, 126, .34) !important;
+  background: linear-gradient(168deg, #fffefb 0%, #f7f4eb 58%, #eeeae0 100%) !important;
+  box-shadow:
+    0 14px 28px -12px rgba(38, 52, 40, .24),
+    0 4px 10px -4px rgba(38, 52, 40, .12),
+    0 3px 0 0 #e6e2d6,
+    0 4px 0 0 rgba(125, 146, 126, .24),
+    inset 0 1px 0 rgba(255, 255, 255, .95) !important;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  perspective: 700px;
+  cursor: pointer;
+  transition: transform .4s cubic-bezier(.22, 1, .36, 1), box-shadow .4s ease;
+}
+.clock .cal-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 18px 34px -12px rgba(38, 52, 40, .28),
+    0 5px 12px -4px rgba(38, 52, 40, .14),
+    0 3px 0 0 #e6e2d6,
+    0 4px 0 0 rgba(125, 146, 126, .28),
+    inset 0 1px 0 rgba(255, 255, 255, .95) !important;
+}
+/* Fine inset stationery hairline frame */
+.clock .cal-card::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(125, 146, 126, .24);
+  border-radius: 4px;
+  pointer-events: none;
+}
+.clock .cal-card::after { content: none !important; display: none !important; }
+
+/* Two tiny brass/gold calendar binding eyelets at the top of each card */
+.clock .cal-pins {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 28px;
+  pointer-events: none;
+  z-index: 3;
+  letter-spacing: 0 !important;
+  color: transparent !important;
+}
+.clock .cal-pins i {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f5e6b8 0%, #c8a855 55%, #8f722c 100%);
+  box-shadow: 0 1px 1px rgba(40, 48, 40, .28), inset 0 .5px .5px rgba(255, 255, 255, .7);
+}
+
+/* Inner face container */
+.clock .cal-face {
+  position: relative;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 16px 8px 12px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.clock .cal-face::after { content: none !important; display: none !important; }
+
+/* Numeral stage with subtle horizontal flip-calendar crease */
+.clock .cal-num-stage {
+  position: relative;
+  width: 82% !important;
+  min-width: 0 !important;
+  padding: 2px 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  transform-style: preserve-3d;
+}
+.clock .cal-num-stage::before {
+  content: "";
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 52%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(125, 146, 126, .22) 20%, rgba(125, 146, 126, .22) 80%, transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+.clock .cal-num-stage::after { content: none !important; display: none !important; }
+
+/* Sculptural Cormorant lining numeral */
+.clock .cal-card b {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 1.06em;
+  overflow: hidden;
+  font: 400 clamp(3rem, 10.5vw, 3.85rem)/1.06 "EditorialNums", "Cormorant Garamond", serif !important;
+  font-variant-numeric: lining-nums tabular-nums !important;
+  font-feature-settings: "lnum" 1, "tnum" 1 !important;
+  color: #2b2b28 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .95) !important;
+  letter-spacing: .01em;
+}
+
+/* 3D flipping calendar leaf overlay on reveal / click */
+.clock .cal-leaf {
+  position: absolute;
+  inset: 0 4% 48% 4%;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, rgba(255, 254, 251, .95), rgba(242, 238, 227, .92));
+  border-bottom: 1px solid rgba(125, 146, 126, .22);
+  transform-origin: center bottom;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  letter-spacing: 0 !important;
+}
+.clock .cal-card.is-flipping .cal-leaf {
+  animation: calLeafFlip .78s cubic-bezier(.32, .05, .24, 1) forwards;
+}
+@keyframes calLeafFlip {
+  0%   { opacity: .92; transform: rotateX(0deg); box-shadow: 0 2px 6px rgba(40, 52, 42, .08); }
+  45%  { opacity: .95; transform: rotateX(-95deg); box-shadow: 0 12px 18px rgba(40, 52, 42, .16); }
+  100% { opacity: 0; transform: rotateX(-180deg); box-shadow: none; }
+}
+
+/* Short sage-gold rule between number and label */
+.clock .cal-rule {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #9fb19e, #c8a855, #9fb19e, transparent);
+  margin: -2px 0 0;
+  letter-spacing: 0 !important;
+}
+
+.clock .cal-label {
+  font: 500 .66rem/1 "Cormorant Garamond", serif !important;
+  letter-spacing: .32em !important;
+  text-transform: uppercase;
+  color: #5b695e !important;
+  padding-left: .32em;
+}
+
+/* Romantic italic sage ampersand between the two cards */
+.clock .cal-amp {
+  font: italic 400 clamp(1.7rem, 5.5vw, 2.2rem)/1 "Cormorant Garamond", serif !important;
+  color: #5f7a64;
+  user-select: none;
+  margin-top: -6px;
+}
+
+@media (max-width: 480px) {
+  .clock.clock-cards { gap: 14px; }
+  .clock .cal-card { width: 118px !important; height: 138px !important; }
+  .clock .cal-pins { padding: 0 24px; }
+  .clock .cal-card b { font-size: clamp(2.65rem, 10vw, 3.2rem) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .clock .cal-card.is-flipping .cal-leaf { animation: none !important; }
+}
+
+.cd-digit-wrap {
+  position: relative;
+  display: inline-block;
+  min-width: .54ch;
+  height: 1.05em;
+  text-align: center;
+  font-style: normal;
+}
+.cd-digit {
+  display: block;
+  height: 1.05em;
+  line-height: 1.05em;
+  font-style: normal;
+  will-change: transform, opacity;
+}
+.cd-digit.roll-in {
+  animation: cdRollIn .45s cubic-bezier(.22, 1, .36, 1) forwards;
+}
+.cd-digit-prev {
+  position: absolute;
+  inset: 0;
+  display: block;
+  height: 1.05em;
+  line-height: 1.05em;
+  font-style: normal;
+  animation: cdRollOut .45s cubic-bezier(.22, 1, .36, 1) forwards;
+  pointer-events: none;
+}
+@keyframes cdRollIn {
+  from { transform: translateY(90%); opacity: 0; filter: blur(1.5px); }
+  to   { transform: translateY(0); opacity: 1; filter: blur(0); }
+}
+@keyframes cdRollOut {
+  from { transform: translateY(0); opacity: 1; filter: blur(0); }
+  to   { transform: translateY(-90%); opacity: 0; filter: blur(1.5px); }
+}
+
+.clock .cd-unit span {
+  position: relative;
+  z-index: 1;
+  font: 500 .62rem/1 "Cormorant Garamond", serif !important;
+  letter-spacing: .28em !important;
+  text-transform: uppercase;
+  color: #6c6a60 !important;
+  margin-top: 0;
+}
+
+/* 60-tick engraved linear horological scale below the countdown */
+.cd-scale {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  max-width: 460px;
+  height: 12px;
+  margin: 8px auto 0;
+  padding: 0 2px;
+  opacity: .9;
+}
+.cd-scale i {
+  display: block;
+  width: 1px;
+  height: 5px;
+  background: rgba(125, 146, 126, .26);
+  border-radius: 1px;
+  transition: background-color .35s ease, height .35s cubic-bezier(.22, 1, .36, 1), transform .35s ease, box-shadow .35s ease;
+}
+.cd-scale i.tick-major {
+  height: 8px;
+  background: rgba(125, 146, 126, .42);
+}
+.cd-scale i.tick-lit {
+  background: #5f7d66;
+}
+.cd-scale i.tick-major.tick-lit {
+  background: #4a6851;
+}
+.cd-scale i.tick-active {
+  height: 12px;
+  background: #b8923a;
+  box-shadow: 0 0 6px rgba(184, 146, 58, .75);
+  transform: scaleX(1.6);
+}
+
+@media (max-width: 480px) {
+  .clock.clock-tiered { padding: 16px 0 12px; }
+  .clock .cd-unit-major b { font-size: clamp(2.45rem, 9vw, 3.1rem) !important; }
+  .clock .cd-unit-minor b { font-size: clamp(1.35rem, 4.8vw, 1.65rem) !important; }
+  .clock .cd-unit-minor:not(:last-child)::after { height: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cd-digit.roll-in, .cd-digit-prev { animation: none !important; }
+  .cd-scale i { transition: none !important; }
+}
+
+/* ===== Bespoke fine-line wedding stationery program timeline ===== */
+.program-block .timeline {
+  max-width: 440px;
+  padding: 18px 0;
+  margin: 8px auto 0;
+}
+/* Delicate vertical botanical spine */
+.timeline::before {
+  width: 1px;
+  background: linear-gradient(180deg, transparent 0%, rgba(105, 124, 108, .48) 6%, rgba(105, 124, 108, .48) 94%, transparent 100%);
+}
+/* Replace hollow AI-looking endpoint circles with subtle diamond finials centered on the spine */
+.timeline li:first-child::before,
+.timeline::after {
+  content: "✦";
+  position: absolute;
+  grid-column: 1 / -1;
+  left: 50%;
+  width: auto;
+  height: auto;
+  margin: 0;
+  translate: -50% -50%;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-size: .52rem;
+  line-height: 1;
+  color: #7d927e;
+}
+.timeline li:first-child::before { top: -18px; }
+.timeline::after { bottom: -10px; }
+
+.timeline li {
+  padding: 12px 0;
+  position: relative;
+}
+/* Tiny solid stationery node dot anchored dead-center on the vertical spine */
+.timeline li::after {
+  content: "";
+  position: absolute;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: #6c826f;
+  border: 0;
+  box-shadow: 0 0 0 4px #ecebe6;
+  pointer-events: none;
+}
+
+/* Editorial alignment of time + label with a fine horizontal branch touching the center spine */
+.timeline .tl-text {
+  min-width: 148px;
+  padding: 0;
+  text-align: center;
+}
+.timeline li:nth-child(even) .tl-text {
+  padding: 0;
+  text-align: center;
+}
+.timeline li:nth-child(odd) time,
+.timeline li:nth-child(odd) b,
+.timeline li:nth-child(even) time,
+.timeline li:nth-child(even) b {
+  padding: 0 18px;
+}
+
+/* Fine horizontal branch line connecting each time to the center spine */
+.timeline time {
+  border-bottom: 1px solid rgba(105, 124, 108, .38);
+  padding: 0 18px 5px;
+  font-size: 1.32rem !important;
+  letter-spacing: .05em;
+  color: #2b2b28;
+  line-height: 1.15;
+}
+.timeline time::before {
+  content: none !important;
+  display: none !important;
+}
+.timeline time small {
+  font-size: .56em;
+  margin-left: 4px;
+  letter-spacing: .16em;
+  color: #6c6a60;
+}
+.timeline b {
+  margin-top: 6px;
+  font-size: .7rem !important;
+  letter-spacing: .22em !important;
+  color: #546158 !important;
+}
+
+/* Bespoke dip-pen ink illustrations: sized for hairline parity with typography */
+.timeline .tl-icon {
+  width: 72px;
+  height: 72px;
+  margin-left: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.timeline li:nth-child(even) .tl-icon {
+  margin: 0 24px 0 0;
+}
+.timeline .tl-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: .92;
+  filter: contrast(1.04);
+  transition: transform .45s cubic-bezier(.22, 1, .36, 1), opacity .35s ease;
+}
+.timeline li:hover .tl-icon img {
+  transform: scale(1.06);
+  opacity: 1;
+}
+
+@media (max-width: 480px) {
+  .timeline .tl-icon { width: 56px; height: 56px; margin-left: 18px; }
+  .timeline li:nth-child(even) .tl-icon { margin: 0 18px 0 0; }
+  .timeline .tl-text { padding: 0 18px 0 4px; }
+  .timeline li:nth-child(even) .tl-text { padding: 0 4px 0 18px; }
+}
+
+/* ===== Animated inline SVG calla lily section dividers (ink draw-in + two-joint coastal breeze sway) ===== */
+.block.has-lily-svg::before { content: none !important; display: none !important; }
+.lily-divider {
+  display: block;
+  width: 138px;
+  height: 44px;
+  margin: 0 auto 30px;
+  overflow: visible;
+  cursor: pointer;
+}
+.lily-divider .ld-path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: var(--len, 120);
+  stroke-dashoffset: var(--len, 120);
+  transition: stroke-dashoffset var(--draw-dur, 1.15s) cubic-bezier(.32, .08, .24, 1) var(--draw-delay, 0s);
+}
+.lily-divider .ld-fill {
+  opacity: 0;
+  transition: opacity .85s ease .8s;
+}
+.lily-divider.is-drawn .ld-path {
+  stroke-dashoffset: 0;
+}
+.lily-divider.is-drawn .ld-fill {
+  opacity: 1;
+}
+/* Whole stem + blossom gently sways from the stem base (8, 33) */
+.lily-divider .ld-whole {
+  transform-origin: 8px 33px;
+}
+.lily-divider.is-drawn .ld-whole {
+  animation: lilyStemSway var(--sway-dur, 4.6s) ease-in-out var(--sway-delay, 1.1s) infinite alternate;
+}
+/* Blossom head flexes gracefully at the neck (82, 22) with a natural phase lag */
+.lily-divider .ld-head {
+  transform-origin: 82px 22px;
+}
+.lily-divider.is-drawn .ld-head {
+  animation: lilyHeadFlex var(--sway-dur, 4.6s) ease-in-out calc(var(--sway-delay, 1.1s) + .45s) infinite alternate;
+}
+.lily-divider .ld-spadix {
+  transition: stroke-dashoffset .65s cubic-bezier(.22, 1, .36, 1) .9s, filter .5s ease;
+}
+.lily-divider.is-drawn .ld-spadix {
+  animation: spadixGlow 3.8s ease-in-out 1.6s infinite;
+}
+/* Delicate rising gold pollen mote from the calla lily tip */
+.lily-divider .ld-pollen {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.lily-divider.is-drawn .ld-pollen {
+  animation: pollenFloat var(--pollen-dur, 4.8s) ease-out var(--pollen-delay, 1.8s) infinite;
+}
+.lily-divider:hover .ld-whole,
+.lily-divider:hover .ld-head {
+  animation-duration: 2.2s;
+}
+@keyframes lilyStemSway {
+  0%   { transform: rotate(-2.4deg) translateY(.8px); }
+  50%  { transform: rotate(1.2deg) translateY(-.8px); }
+  100% { transform: rotate(2.8deg) translateY(.3px); }
+}
+@keyframes lilyHeadFlex {
+  0%   { transform: rotate(-3.2deg) scale(1); }
+  50%  { transform: rotate(1.6deg) scale(1.025); }
+  100% { transform: rotate(3.6deg) scale(1); }
+}
+@keyframes spadixGlow {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(201, 180, 106, 0)); }
+  50%      { filter: drop-shadow(0 0 3.5px rgba(212, 184, 92, .75)); }
+}
+@keyframes pollenFloat {
+  0%   { opacity: 0; transform: translate(0, 0) scale(.5); }
+  18%  { opacity: .85; transform: translate(3px, -5px) scale(1); }
+  70%  { opacity: .55; transform: translate(9px, -14px) scale(.85); }
+  100% { opacity: 0; transform: translate(13px, -20px) scale(.4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lily-divider .ld-path { stroke-dashoffset: 0 !important; transition: none !important; }
+  .lily-divider .ld-fill { opacity: 1 !important; transition: none !important; }
+  .lily-divider .ld-whole, .lily-divider .ld-head, .lily-divider .ld-spadix, .lily-divider .ld-pollen { animation: none !important; }
+}
+
+/* ===== Closing RSVP note & tactile sage-plaster calendar CTA (no generic wireframe boxes) ===== */
+.onepage .rsvp-note {
+  margin: 30px auto 0 !important;
+  padding: 0 !important;
+  max-width: 340px;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  font: 400 1.14rem/1.65 "Cormorant Garamond", serif !important;
+  color: #3a403c !important;
+}
+.onepage .rsvp-note .mini-label {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 10px !important;
+  font-size: .72rem !important;
+  letter-spacing: .34em !important;
+  color: #6b7d6e !important;
+}
+.onepage .rsvp-note .mini-label::before,
+.onepage .rsvp-note .mini-label::after {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(125, 146, 126, .65));
+}
+.onepage .rsvp-note .mini-label::after {
+  background: linear-gradient(90deg, rgba(125, 146, 126, .65), transparent);
+}
+.onepage .rsvp-note b {
+  font-style: italic;
+  font-weight: 500;
+  color: #36593f;
+  padding: 0 2px 1px;
+  border-bottom: 1px solid rgba(196, 166, 88, .55);
+}
+
+/* Signature tactile pill CTA using the envelope's own sage-plaster material */
+.onepage .calendar-button {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 28px auto 0 !important;
+  min-height: 50px;
+  padding: 0 28px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 255, 255, .26) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .13), rgba(22, 36, 26, .16)),
+    url("assets/sage-plaster-texture.webp") center/cover,
+    #5d7560 !important;
+  color: #faf8f1 !important;
+  font-size: .72rem !important;
+  font-weight: 500 !important;
+  letter-spacing: .22em !important;
+  text-shadow: 0 1px 2px rgba(24, 36, 26, .28);
+  box-shadow:
+    0 12px 24px -10px rgba(34, 50, 38, .44),
+    0 3px 8px -2px rgba(34, 50, 38, .18),
+    inset 0 1px 0 rgba(255, 255, 255, .28),
+    inset 0 0 0 3px rgba(255, 255, 255, .10);
+  transition: transform .35s cubic-bezier(.22, 1, .36, 1), box-shadow .35s ease, filter .35s ease;
+}
+.onepage .calendar-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 250, 232, .22) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform .8s cubic-bezier(.22, 1, .36, 1);
+  pointer-events: none;
+}
+.onepage .calendar-button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+  box-shadow:
+    0 16px 28px -10px rgba(34, 50, 38, .5),
+    0 4px 10px -2px rgba(34, 50, 38, .22),
+    inset 0 1px 0 rgba(255, 255, 255, .34),
+    inset 0 0 0 3px rgba(255, 255, 255, .14);
+}
+.onepage .calendar-button:hover::after {
+  transform: translateX(120%);
+}
+.onepage .calendar-button:active {
+  transform: translateY(0) scale(.985);
+}
+.onepage .calendar-button .cal-btn-ico {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: #f5e6ba;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: .95;
+}
+.onepage .calendar-button .cal-btn-ico text {
+  fill: #faf8f1;
+  stroke: none;
+  font-size: 7.4px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+@media (max-width: 520px) {
+  .onepage .calendar-button { padding: 0 22px !important; font-size: .64rem !important; letter-spacing: .16em !important; }
+}
+
+/* ===== Scroll-driven Program Timeline spine & delicate object micro-animations ===== */
+.timeline .tl-progress {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1.5px;
+  height: var(--tl-p, 0%);
+  translate: -50% 0;
+  background: linear-gradient(180deg, #7d9680 0%, #5c7a62 72%, #c9a64c 100%);
+  box-shadow: 0 0 6px rgba(201, 166, 76, .35);
+  pointer-events: none;
+  z-index: 1;
+  transition: height .14s linear;
+}
+/* Glowing tip bead at the leading edge of the scroll spine */
+.timeline .tl-progress::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 5px;
+  height: 5px;
+  translate: -50% 50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fffef6 15%, #dfb958 65%, #b58d31 100%);
+  box-shadow: 0 0 8px 2px rgba(223, 185, 88, .7);
+  opacity: var(--tl-tip, 0);
+  transition: opacity .35s ease;
+}
+
+/* Active node dot blooms into warm champagne gold as the scroll thread reaches it */
+.timeline li::after {
+  z-index: 2;
+  transition: background-color .45s ease, transform .45s cubic-bezier(.34, 1.56, .64, 1), box-shadow .45s ease;
+}
+.timeline li.tl-reached::after {
+  background: #c5a048;
+  transform: scale(1.45);
+  box-shadow: 0 0 0 4px #ecebe6, 0 0 10px 2px rgba(197, 160, 72, .45);
+}
+
+/* Horizontal branch line draws smoothly from the center spine outward */
+.timeline time {
+  border-bottom: 0 !important;
+  position: relative;
+}
+.timeline time::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: rgba(105, 124, 108, .4);
+  transform-origin: right center;
+  transform: scaleX(0);
+  transition: transform .85s cubic-bezier(.22, 1, .36, 1) .12s, background-color .5s ease;
+}
+.timeline li:nth-child(even) time::after {
+  transform-origin: left center;
+}
+.timeline li.sr-in time::after,
+.timeline li.tl-reached time::after {
+  transform: scaleX(1);
+}
+.timeline li.tl-reached time::after {
+  background: linear-gradient(90deg, rgba(105, 124, 108, .25), rgba(197, 160, 72, .68));
+}
+.timeline li:nth-child(even).tl-reached time::after {
+  background: linear-gradient(90deg, rgba(197, 160, 72, .68), rgba(105, 124, 108, .25));
+}
+
+/* Icon wrapper holds subtle subject-matched ambient details */
+.timeline .tl-icon {
+  position: relative;
+}
+.timeline .tl-icon img {
+  transition: transform .7s cubic-bezier(.22, 1, .36, 1), opacity .55s ease, filter .55s ease;
+}
+.timeline li.tl-reached .tl-icon img {
+  opacity: 1;
+}
+
+/* Delicate object-specific micro-effects (no puppet rocking) */
+.tl-fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+/* 1. Diamond & sparkler golden star glint */
+.tl-glint {
+  position: absolute;
+  width: var(--gs, 9px);
+  height: var(--gs, 9px);
+  translate: -50% -50%;
+  background: radial-gradient(circle, #fffef6 10%, #e4c15f 45%, rgba(228, 193, 95, 0) 75%);
+  clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
+  opacity: 0;
+  animation: tlGlint var(--gd, 3.4s) ease-in-out var(--gdel, 0s) infinite;
+}
+@keyframes tlGlint {
+  0%, 72%, 100% { opacity: 0; transform: scale(.3) rotate(0deg); }
+  84%           { opacity: .95; transform: scale(1.25) rotate(22deg); }
+  92%           { opacity: .45; transform: scale(.8) rotate(45deg); }
+}
+
+/* 2. Champagne bubbles & tiny drifting music note */
+.tl-bubble {
+  position: absolute;
+  width: var(--bs, 3.5px);
+  height: var(--bs, 3.5px);
+  border-radius: 50%;
+  border: .9px solid rgba(188, 152, 62, .75);
+  background: rgba(255, 252, 238, .65);
+  translate: -50% -50%;
+  opacity: 0;
+  animation: tlFloatUp var(--bd, 3.2s) ease-out var(--bdel, 0s) infinite;
+}
+.tl-note {
+  position: absolute;
+  font: 600 9px/1 "Cormorant Garamond", serif !important;
+  color: #6f7f6e;
+  translate: -50% -50%;
+  opacity: 0;
+  animation: tlFloatUp var(--bd, 3.6s) ease-out var(--bdel, 0s) infinite;
+}
+@keyframes tlFloatUp {
+  0%   { opacity: 0; transform: translate(0, 3px) scale(.6); }
+  22%  { opacity: .85; transform: translate(var(--bx, 3px), -4px) scale(1); }
+  75%  { opacity: .55; transform: translate(calc(var(--bx, 3px) * 1.5), -13px) scale(.9); }
+  100% { opacity: 0; transform: translate(calc(var(--bx, 3px) * 2), -19px) scale(.5); }
+}
+
+/* 3. Warm candle flame glow on Dinner taper candle */
+.tl-flame {
+  position: absolute;
+  width: 9px;
+  height: 12px;
+  border-radius: 50%;
+  translate: -50% -50%;
+  background: radial-gradient(circle, rgba(255, 246, 200, .95) 0%, rgba(235, 184, 72, .55) 45%, rgba(235, 184, 72, 0) 75%);
+  animation: tlCandle 2.2s ease-in-out infinite;
+}
+@keyframes tlCandle {
+  0%, 100% { opacity: .6; transform: scale(.88) translateY(0); }
+  35%      { opacity: .98; transform: scale(1.16) translateY(-.8px); }
+  65%      { opacity: .75; transform: scale(.96) translateY(-.3px); }
+}
+
+/* 4. Soft warm steam wisps for Late-night bites */
+.tl-steam {
+  position: absolute;
+  width: 4px;
+  height: 10px;
+  border-radius: 999px;
+  border-left: 1px solid rgba(125, 140, 128, .48);
+  translate: -50% -50%;
+  opacity: 0;
+  animation: tlSteam var(--bd, 3.4s) ease-in-out var(--bdel, 0s) infinite;
+}
+@keyframes tlSteam {
+  0%   { opacity: 0; transform: translate(0, 4px) scaleY(.7); }
+  30%  { opacity: .65; transform: translate(2px, -3px) scaleY(1); }
+  80%  { opacity: .3; transform: translate(-1px, -11px) scaleY(1.15); }
+  100% { opacity: 0; transform: translate(1px, -16px) scaleY(.8); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline .tl-progress, .tl-fx { display: none !important; }
+  .timeline time::after { transform: scaleX(1) !important; transition: none !important; }
+}
+
+/* ===== Bespoke editorial layout for "the DETAILS" (fine-line vignettes + dress code palette) ===== */
+.details-block .detail-art {
+  display: block;
+  width: 78px;
+  height: 78px;
+  margin: 0 auto 12px;
+  object-fit: contain;
+  opacity: .9;
+  transition: transform .45s cubic-bezier(.22, 1, .36, 1), opacity .35s ease;
+}
+.details-block .detail-art-dress {
+  width: 88px;
+  height: 88px;
+  margin-bottom: 10px;
+}
+.details-block .detail-block:hover .detail-art {
+  transform: translateY(-2px) scale(1.03);
+  opacity: 1;
+}
+.details-block .detail-dress {
+  max-width: 380px !important;
+  margin: 0 auto 30px !important;
+  padding-bottom: 28px !important;
+  border-bottom: 1px solid rgba(125, 146, 126, .24) !important;
+}
+.details-block .detail-dress .weather-note {
+  margin-top: 12px !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+  font-style: italic;
+  font-size: .95rem !important;
+  color: #6c6a60 !important;
+}
+
+/* 5-tone coastal wedding dress code fabric/watercolor swatches */
+.dress-palette {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 14px auto 2px;
+  padding: 4px 10px;
+}
+.dress-palette i {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  margin-left: -4px;
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .32), transparent 58%), var(--sw);
+  border: 2px solid #f2f0e8;
+  box-shadow: 0 3px 8px -2px rgba(42, 56, 45, .28), inset 0 0 0 .5px rgba(42, 56, 45, .14);
+  transition: transform .35s cubic-bezier(.34, 1.56, .64, 1);
+}
+.dress-palette i:first-child { margin-left: 0; }
+.dress-palette i:hover { transform: translateY(-3px) scale(1.14); z-index: 2; }
+
+/* Paired 2-column Setting & Kind Note vignettes with a center hairline divider */
+.details-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 32px;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  align-items: start;
+}
+.details-pair::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 16%;
+  bottom: 10%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(125, 146, 126, .34) 25%, rgba(125, 146, 126, .34) 75%, transparent);
+  pointer-events: none;
+}
+.details-pair .detail-block {
+  margin: 0 auto !important;
+  max-width: 210px !important;
+}
+.details-pair .detail-block p {
+  font-size: 1.06rem !important;
+  line-height: 1.55 !important;
+}
+@media (max-width: 520px) {
+  .details-pair { grid-template-columns: 1fr; gap: 30px; }
+  .details-pair::before { display: none; }
+  .details-pair .detail-block { max-width: 280px !important; }
+}
+
+/* ===== Language switcher (EN / 日本語) & Japanese Shippori Mincho typography ===== */
+.lang-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 45;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 146, 126, .42);
+  background: rgba(247, 245, 238, .84);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px rgba(30, 44, 32, .14);
+}
+.lang-toggle button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: #5b6d5e;
+  font: 500 .66rem/1 "Cormorant Garamond", "Shippori Mincho", serif;
+  letter-spacing: .12em;
+  padding: 7px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color .25s ease, color .25s ease;
+}
+.lang-toggle button[aria-pressed="true"] {
+  background: #5c7560;
+  color: #faf8f1;
+}
+.lang-toggle button:focus-visible {
+  outline: 2px solid #5f7967;
+  outline-offset: 2px;
+}
+
+/* Refined Japanese wedding Mincho typography when lang="ja" */
+html[lang="ja"] .onepage,
+html[lang="ja"] .onepage * {
+  font-family: "EditorialNums", "Cormorant Garamond", "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif !important;
+}
+html[lang="ja"] .hero h2 {
+  font-size: clamp(1.08rem, 4.1vw, 1.32rem);
+  line-height: 1.75;
+  letter-spacing: .06em;
+}
+html[lang="ja"] .hero-sub {
+  font-style: normal;
+  font-size: .92rem;
+  letter-spacing: .06em;
+}
+html[lang="ja"] .onepage .eyebrow,
+html[lang="ja"] .mini-label,
+html[lang="ja"] .venue-hint,
+html[lang="ja"] .clock .cal-label,
+html[lang="ja"] .timeline b {
+  letter-spacing: .16em !important;
+  text-transform: none;
+}
+html[lang="ja"] .hero-date {
+  font-size: .92rem !important;
+  letter-spacing: .12em !important;
+}
+html[lang="ja"] .onepage .countdown {
+  font-style: normal;
+  font-size: .9rem;
+  letter-spacing: .14em;
+}
+html[lang="ja"] .details-block .detail-block p,
+html[lang="ja"] .onepage .story p:not(.eyebrow),
+html[lang="ja"] .onepage .rsvp > p:not(.rsvp-note) {
+  font-size: .96rem !important;
+  line-height: 1.85 !important;
+  letter-spacing: .04em;
+}
+html[lang="ja"] .details-block .detail-dress .weather-note {
+  font-style: normal;
+  font-size: .84rem !important;
+  line-height: 1.75 !important;
+}
+html[lang="ja"] .onepage .rsvp-note {
+  font-size: .95rem !important;
+  line-height: 1.8 !important;
+}
+html[lang="ja"] .onepage .rsvp-note b {
+  font-style: normal;
+  font-weight: 600;
+}
+html[lang="ja"] .onepage .calendar-button {
+  font-size: .78rem !important;
+  letter-spacing: .14em !important;
+}
+html[lang="ja"] .onepage .signoff i {
+  font-size: .88rem;
+  letter-spacing: .14em;
+}
+
+/* Refined centerpiece couple names (light italic Cormorant from 80f576b + Playfair italic sage &) */
+.hero-names,
+html[lang="ja"] .hero-names {
+  font-family: "Cormorant Garamond", serif !important;
+  font-style: italic !important;
+  font-weight: 300 !important;
+  font-size: clamp(3.3rem, 12.5vw, 4.6rem) !important;
+  line-height: 1.04 !important;
+  letter-spacing: .02em !important;
+  color: #2f2f2b;
+  margin: 8px 0 12px !important;
+}
+.signoff span,
+html[lang="ja"] .signoff span {
+  font-family: "Cormorant Garamond", serif !important;
+  font-style: italic !important;
+  font-weight: 300 !important;
+  font-size: 1.95rem !important;
+  line-height: 1.1 !important;
+  letter-spacing: .02em !important;
+  color: #2f2f2b;
+}
+.hero-names em,
+.signoff em,
+html[lang="ja"] .hero-names em,
+html[lang="ja"] .signoff em {
+  font-family: "Playfair Display", Georgia, serif !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  font-size: 0.78em;
+  line-height: 1;
+  color: #5f7a63;
+  margin: 0 .14em 0 .1em;
+  vertical-align: .02em;
+  display: inline-block;
+  letter-spacing: 0 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .65);
+}
+/* Crisper mini-label contrast from 80f576b */
+.mini-label {
+  font-weight: 600 !important;
+  color: #5a6d5e !important;
+}
+
+/* Animated single-line wedding rings flourish */
+svg.rings-art {
+  display: block;
+  width: 248px;
+  height: auto;
+  margin: -4px auto 18px;
+  overflow: visible;
+  cursor: pointer;
+  opacity: .92;
+}
+@media (max-width: 520px) {
+  svg.rings-art { width: 214px; }
+}
+svg.rings-art .rings-path {
+  fill: none;
+  stroke: #2f332f;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: var(--len, 1600);
+  stroke-dashoffset: var(--len, 1600);
+  transition: stroke-dashoffset var(--draw-dur, 1.5s) cubic-bezier(.36, .08, .22, 1) var(--draw-delay, 0s);
+}
+svg.rings-art .rings-second {
+  stroke-width: 1.65;
+}
+svg.rings-art.is-drawn .rings-path {
+  stroke-dashoffset: 0;
+}
+svg.rings-art .rings-glint {
+  fill: #c8a85e;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+svg.rings-art.is-drawn .rings-glint {
+  animation: ringsGlint 4.4s ease-in-out infinite;
+}
+svg.rings-art.is-drawn .rg-1 { animation-delay: 2.1s; }
+svg.rings-art.is-drawn .rg-2 { animation-delay: 4.0s; }
+@keyframes ringsGlint {
+  0%, 72%, 100% { opacity: 0; transform: scale(.35) rotate(0deg); }
+  82% { opacity: .9; transform: scale(1.08) rotate(22deg); }
+  90% { opacity: .35; transform: scale(.75) rotate(45deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  svg.rings-art .rings-path { stroke-dashoffset: 0 !important; transition: none !important; }
+  svg.rings-art .rings-glint { animation: none !important; opacity: .55; }
+}
+
+/* Natural Japanese line wrapping so words never split mid-phrase */
+html[lang="ja"] .details-block .detail-block p,
+html[lang="ja"] .onepage .story p:not(.eyebrow),
+html[lang="ja"] .onepage .rsvp > p:not(.rsvp-note),
+html[lang="ja"] .details-block .detail-dress .weather-note {
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+html[lang="ja"] .details-pair .detail-block p {
+  font-size: .9rem !important;
+  line-height: 1.9 !important;
+  letter-spacing: .03em;
+}
+.jp-phrase {
+  display: inline-block;
+}

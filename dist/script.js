@@ -111,22 +111,116 @@ const eventEnd = new Date('2027-04-18T22:00:00+08:00');
 const countdown = document.querySelector('#countdown');
 
 const pad = (n) => String(n).padStart(2, '0');
+const CIRC = 2 * Math.PI * 45; // r=45 -> 282.743
+const prevDigits = {};
+
+function renderRollingValue(el, nextStr) {
+  if (!el) return;
+  const id = el.id;
+  const prevStr = prevDigits[id];
+  if (prevStr === nextStr) return;
+  prevDigits[id] = nextStr;
+
+  // First render or length change: build digit slots cleanly (using <i> so .clock span rules don't hit digits)
+  if (!prevStr || prevStr.length !== nextStr.length) {
+    el.innerHTML = '';
+    [...nextStr].forEach((ch) => {
+      const wrap = document.createElement('i');
+      wrap.className = 'cd-digit-wrap';
+      const cur = document.createElement('i');
+      cur.className = 'cd-digit';
+      cur.textContent = ch;
+      wrap.appendChild(cur);
+      el.appendChild(wrap);
+    });
+    return;
+  }
+
+  // Subsequent ticks: animate only the digits that changed
+  const wraps = el.querySelectorAll('.cd-digit-wrap');
+  [...nextStr].forEach((ch, idx) => {
+    if (prevStr[idx] === ch) return;
+    const wrap = wraps[idx];
+    if (!wrap) return;
+    const oldCur = wrap.querySelector('.cd-digit');
+    wrap.querySelectorAll('.cd-digit-prev').forEach((n) => n.remove());
+    if (oldCur) {
+      oldCur.className = 'cd-digit-prev';
+      oldCur.addEventListener('animationend', () => oldCur.remove(), { once: true });
+    }
+    const nextCur = document.createElement('i');
+    nextCur.className = 'cd-digit roll-in';
+    nextCur.textContent = ch;
+    wrap.appendChild(nextCur);
+  });
+}
+
+let currentLang = 'en';
+
 function updateCountdown() {
-  const diff = eventStart - new Date();
+  const now = new Date();
+  const diff = eventStart - now;
+  const isJa = currentLang === 'ja';
   if (diff <= 0) {
     document.querySelector('#clock').hidden = true;
-    countdown.textContent = new Date() < eventEnd ? 'Today is our wedding day' : 'Thank you for celebrating with us';
+    countdown.textContent = now < eventEnd
+      ? (isJa ? '本日は私たちの結婚式です' : 'Today is our wedding day')
+      : (isJa ? 'ご参列いただきありがとうございました' : 'Thank you for celebrating with us');
     return false;
   }
-  const s = Math.floor(diff / 1000);
-  document.querySelector('#cdDays').textContent = Math.floor(s / 86400);
-  document.querySelector('#cdHours').textContent = pad(Math.floor(s / 3600) % 24);
-  document.querySelector('#cdMins').textContent = pad(Math.floor(s / 60) % 60);
-  document.querySelector('#cdSecs').textContent = pad(s % 60);
-  countdown.textContent = 'until we say I do';
+
+  // Calculate exact calendar months + remaining days
+  let months = 0;
+  const cursor = new Date(now.getTime());
+  while (true) {
+    const nextMonth = new Date(cursor.getTime());
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    if (nextMonth <= eventStart) {
+      months++;
+      cursor.setMonth(cursor.getMonth() + 1);
+    } else {
+      break;
+    }
+  }
+  const remSec = Math.floor((eventStart - cursor) / 1000);
+  const days = Math.floor(remSec / 86400);
+
+  renderRollingValue(document.querySelector('#cdMonths'), String(months));
+  renderRollingValue(document.querySelector('#cdDays'), String(days));
+
+  const lblMonths = document.querySelector('#lblMonths');
+  const lblDays = document.querySelector('#lblDays');
+  if (lblMonths) lblMonths.textContent = isJa ? 'ヶ月' : (months === 1 ? 'Month' : 'Months');
+  if (lblDays) lblDays.textContent = isJa ? '日' : (days === 1 ? 'Day' : 'Days');
+
+  countdown.textContent = isJa ? '誓いの日まであと' : 'until we say I do';
   return true;
 }
-if (updateCountdown()) setInterval(updateCountdown, 1000);
+if (updateCountdown()) setInterval(updateCountdown, 60000);
+
+// Flip-calendar leaf animation when cards scroll into view or are tapped
+(() => {
+  const cards = document.querySelectorAll('.clock-cards .cal-card');
+  if (!cards.length) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const triggerFlip = (card) => {
+    if (reduce) return;
+    card.classList.remove('is-flipping');
+    void card.offsetWidth;
+    card.classList.add('is-flipping');
+  };
+  cards.forEach((card) => card.addEventListener('click', () => triggerFlip(card)));
+  if (reduce) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      cards.forEach((c, i) => setTimeout(() => triggerFlip(c), 260 + i * 200));
+      io.disconnect();
+    });
+  }, { threshold: 0.3 });
+  const clockEl = document.querySelector('#clock');
+  if (clockEl) io.observe(clockEl);
+})();
 
 document.querySelector('#calendarButton').addEventListener('click', () => {
   const format = (date) => date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
@@ -145,7 +239,7 @@ document.querySelector('#calendarButton').addEventListener('click', () => {
 });
 
 const timeline = document.querySelector('.timeline');
-if (timeline) new IntersectionObserver((entries, obs) => {
+new IntersectionObserver((entries, obs) => {
   entries.forEach((entry) => { if (entry.isIntersecting) { timeline.classList.add('in'); obs.disconnect(); } });
 }, { threshold: .2 }).observe(timeline);
 
@@ -183,7 +277,7 @@ if (timeline) new IntersectionObserver((entries, obs) => {
     '.block .eyebrow', '.script-title',
     '.clock > div', '.onepage .countdown',
     '.details-block .detail-block',
-    '.tl2 .tl2-text',
+    '.timeline li',
     '.onepage .story p:not(.eyebrow)',
     '.rsvp > p:not(.signoff)', '.rsvp-note', '.calendar-button', '.closing-seal', '.signoff'
   ];
@@ -195,7 +289,7 @@ if (timeline) new IntersectionObserver((entries, obs) => {
       // small stagger between siblings of the same group (e.g. countdown boxes, timeline rows)
       const sibs = [...el.parentElement.children].filter((c) => c.matches(sel));
       el.style.setProperty('--sr-delay', `${Math.min(sibs.indexOf(el), 6) * 90}ms`);
-      
+      if (el.matches('.timeline li')) el.classList.add(sibs.indexOf(el) % 2 ? 'sr-from-right' : 'sr-from-left');
       items.push(el);
     });
   });
@@ -462,25 +556,464 @@ if (timeline) new IntersectionObserver((entries, obs) => {
   update();
 })();
 
-// Program timeline: the centre line draws down with scroll; medallions pop in as the line reaches them
+// Venue celebration life: twinkling string lights, pool water shimmer, and cheerful guest toasts
 (() => {
-  const tl = document.querySelector('#timeline2');
+  const box = document.querySelector('#venueLife');
+  const stage = document.querySelector('.hero-stage');
+  if (!box || !stage) return;
+
+  // Seamless looping venue cinemagraph video (activates automatically when dist/assets/venue-loop.mp4 or .webm exists)
+  const video = document.querySelector('#heroVideo');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (video && !reduceMotion) {
+    video.addEventListener('canplay', () => {
+      video.hidden = false;
+      requestAnimationFrame(() => {
+        video.classList.add('is-ready');
+        stage.classList.add('has-video');
+        video.play().catch(() => {});
+      });
+    }, { once: true });
+  }
+  let seed = 20270418;
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+  // 1) Fairy string lights along the ground-floor colonnade & warm balcony downlights
+  const lights = [
+    // Colonnade draped string lights (x%, y%)
+    [29.5, 62.6], [31.8, 63.4], [34.2, 63.7], [36.5, 63.1], [38.2, 62.3],
+    [41.5, 62.5], [44.0, 63.3], [46.5, 63.8], [49.0, 63.3], [51.2, 62.4],
+    [54.2, 62.5], [56.8, 63.4], [59.3, 63.8], [61.8, 63.3], [64.0, 62.4],
+    [67.2, 62.5], [69.8, 63.3], [72.5, 63.7], [75.0, 63.2], [76.8, 62.3],
+    // Warm ceiling lights on 2nd & 3rd floors
+    [56.8, 18.6], [61.5, 18.6], [66.2, 18.6], [71.1, 18.6], [75.8, 18.6], [85.0, 18.6], [90.2, 18.6],
+    [32.5, 38.6], [42.8, 38.6], [56.8, 38.6], [71.2, 38.6], [85.5, 38.6]
+  ];
+  lights.forEach(([x, y], i) => {
+    const el = document.createElement('span');
+    el.className = 'venue-sparkle';
+    const sz = i < 20 ? (4.5 + rnd() * 2.5) : (5.5 + rnd() * 2);
+    el.style.cssText = `left:${x}%;top:${y}%;--sz:${sz.toFixed(1)}px;--dur:${(2.2 + rnd() * 2.4).toFixed(2)}s;--delay:${(-rnd() * 4).toFixed(2)}s`;
+    box.appendChild(el);
+  });
+
+  // 2) Subtle celebration motes rising above the bride & groom and guest groups
+  const groups = [
+    { x: 29.0, y: 22.0, type: 'clink' }, // 3rd floor balcony toast
+    { x: 28.2, y: 21.5, type: 'note' },
+    { x: 31.2, y: 43.8, type: 'heart', color: '#d4a656' }, // 2nd floor left group
+    { x: 61.5, y: 43.2, type: 'clink' }, // 2nd floor mid-right waving couple
+    { x: 70.0, y: 43.8, type: 'note' },  // 2nd floor right trio
+    { x: 21.0, y: 67.5, type: 'clink' }, // Ground floor left group
+    { x: 31.0, y: 68.0, type: 'note' },  // Ground floor cocktail table couple
+    { x: 43.5, y: 66.8, type: 'clink' }, // Guests cheering left of couple
+    { x: 49.8, y: 65.2, type: 'heart', color: '#c44b49' }, // Bride & Groom center!
+    { x: 51.0, y: 65.8, type: 'heart', color: '#d4a656' },
+    { x: 56.8, y: 66.8, type: 'clink' }, // Guests cheering right of couple
+    { x: 73.2, y: 67.5, type: 'heart', color: '#c44b49' }  // Ground floor right couple
+  ];
+  groups.forEach((g, idx) => {
+    const el = document.createElement('span');
+    el.className = `venue-mote mote-${g.type}`;
+    if (g.type === 'note') el.textContent = idx % 2 === 0 ? '♪' : '♫';
+    if (g.color) el.style.setProperty('--mc', g.color);
+    const dx = ((rnd() - 0.5) * 14).toFixed(1);
+    el.style.cssText += `left:${g.x}%;top:${g.y}%;--dx:${dx}px;--dur:${(4.2 + rnd() * 2.5).toFixed(2)}s;--delay:${(-rnd() * 6).toFixed(2)}s;--op:${(0.65 + rnd() * 0.25).toFixed(2)}`;
+    box.appendChild(el);
+  });
+
+  // 3) Pool water shimmer glints
+  for (let i = 0; i < 14; i++) {
+    const el = document.createElement('span');
+    el.className = 'pool-gleam';
+    const x = 12 + rnd() * 76, y = 83.2 + rnd() * 5.2, w = 14 + rnd() * 26;
+    el.style.cssText = `left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;width:${w.toFixed(0)}px;--dur:${(3.2 + rnd() * 2.8).toFixed(2)}s;--delay:${(-rnd() * 5).toFixed(2)}s`;
+    box.appendChild(el);
+  }
+
+  // 4) Interactive celebration burst when tapping/clicking the venue illustration
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  stage.addEventListener('click', (e) => {
+    if (reduce) return;
+    const rect = stage.getBoundingClientRect();
+    // Spawn a warm cheer from the bride & groom and where the user tapped
+    const origins = [
+      [e.clientX, e.clientY],
+      [rect.left + rect.width * 0.50, rect.top + rect.height * 0.67]
+    ];
+    origins.forEach(([cx, cy], oIdx) => {
+      const count = oIdx === 0 ? 10 : 8;
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('span');
+        const gold = i % 2 === 0;
+        el.className = 'burst ' + (gold ? 'burst-gold' : 'burst-petal');
+        const ang = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.3;
+        const dist = 35 + Math.random() * 55;
+        const size = gold ? 3 + Math.random() * 3.5 : 5 + Math.random() * 4.5;
+        el.style.cssText = `left:${cx}px;top:${cy}px;width:${size}px;height:${gold ? size * .8 : size * 1.4}px;` +
+          `--dx:${(Math.cos(ang) * dist).toFixed(0)}px;--dy:${(Math.sin(ang) * dist - 18).toFixed(0)}px;` +
+          `--fall:${(30 + Math.random() * 45).toFixed(0)}px;--rot:${Math.round((Math.random() - .5) * 360)}deg;--t:${(1.2 + Math.random() * .6).toFixed(2)}s`;
+        document.body.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+      }
+    });
+  });
+})();
+
+// Animated inline SVG calla lily dividers: calligraphic ink draw-in on scroll + gentle coastal breeze sway
+(() => {
+  const blocks = document.querySelectorAll('.onepage .block');
+  if (!blocks.length) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const NS = 'http://www.w3.org/2000/svg';
+
+  const makePath = (d, attrs, cls = 'ld-path') => {
+    const p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', d);
+    Object.entries(attrs).forEach(([k, v]) => p.setAttribute(k, v));
+    if (cls) p.setAttribute('class', cls);
+    return p;
+  };
+
+  const dividers = [];
+  blocks.forEach((block, idx) => {
+    block.classList.add('has-lily-svg');
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'lily-divider');
+    svg.setAttribute('viewBox', '0 0 132 40');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.style.setProperty('--sway-dur', `${(4.2 + (idx % 3) * 0.6).toFixed(1)}s`);
+    svg.style.setProperty('--sway-delay', `${(1.1 + idx * 0.25).toFixed(2)}s`);
+    svg.style.setProperty('--pollen-dur', `${(4.4 + (idx % 2) * 0.9).toFixed(1)}s`);
+    svg.style.setProperty('--pollen-delay', `${(1.6 + idx * 0.4).toFixed(2)}s`);
+
+    const whole = document.createElementNS(NS, 'g');
+    whole.setAttribute('class', 'ld-whole');
+
+    // Stems (draw first from left to right)
+    const stem1 = makePath('M6 33C30 30 58 27 82 22', { stroke: '#7fa086', 'stroke-width': '.95' });
+    const stem2 = makePath('M20 35C42 31 66 28 88 24', { stroke: '#7fa086', 'stroke-width': '.7', opacity: '.7' });
+    stem1.style.cssText = '--draw-dur:.9s;--draw-delay:0s';
+    stem2.style.cssText = '--draw-dur:.85s;--draw-delay:.15s';
+    whole.appendChild(stem1);
+    whole.appendChild(stem2);
+
+    // Blossom head group (flexes gently around the neck at 82,22)
+    const head = document.createElementNS(NS, 'g');
+    head.setAttribute('class', 'ld-head');
+
+    const petalFill = makePath('M82 22C88 15 97 8 106 7 114 6 121 10 124 16 118 15 112 16 108 20 103 25 94 26 86 24 Z', { fill: '#eef2e8', stroke: 'none' }, 'ld-fill');
+    const petalLine = makePath('M82 22C88 15 97 8 106 7 114 6 121 10 124 16 118 15 112 16 108 20 103 25 94 26 86 24 Z', { stroke: '#5f8566', 'stroke-width': '.95' });
+    const innerVein = makePath('M106 7C104 12 100 18 95 22', { stroke: '#5f8566', 'stroke-width': '.7', opacity: '.75' });
+    const tipCurl = makePath('M124 16C126 14 127 11 125 9', { stroke: '#5f8566', 'stroke-width': '.8' });
+    const spadix = makePath('M92 21C96 17 101 14 105 13', { stroke: '#c9b46a', 'stroke-width': '1.25' }, 'ld-path ld-spadix');
+
+    petalLine.style.cssText = '--draw-dur:1s;--draw-delay:.45s';
+    innerVein.style.cssText = '--draw-dur:.5s;--draw-delay:.85s';
+    tipCurl.style.cssText = '--draw-dur:.4s;--draw-delay:1.05s';
+    spadix.style.cssText = '--draw-dur:.55s;--draw-delay:.9s';
+
+    // Two tiny golden pollen motes rising softly from the blossom tip
+    const p1 = document.createElementNS(NS, 'circle');
+    p1.setAttribute('class', 'ld-pollen');
+    p1.setAttribute('cx', '108'); p1.setAttribute('cy', '12'); p1.setAttribute('r', '1.2');
+    p1.setAttribute('fill', '#d4b85c');
+    const p2 = document.createElementNS(NS, 'circle');
+    p2.setAttribute('class', 'ld-pollen');
+    p2.setAttribute('cx', '118'); p2.setAttribute('cy', '10'); p2.setAttribute('r', '.95');
+    p2.setAttribute('fill', '#9ab59d');
+    p2.style.setProperty('--pollen-delay', `${(3.2 + idx * 0.4).toFixed(2)}s`);
+
+    head.append(petalFill, petalLine, innerVein, tipCurl, spadix, p1, p2);
+    whole.appendChild(head);
+    svg.appendChild(whole);
+    block.prepend(svg);
+
+    // Measure exact path lengths for seamless stroke-dashoffset ink draw-in
+    svg.querySelectorAll('.ld-path').forEach((p) => {
+      const len = Math.ceil(p.getTotalLength() || 120);
+      p.style.setProperty('--len', String(len));
+    });
+
+    // Tap/click to re-draw & release a tiny golden pollen shimmer
+    svg.addEventListener('click', () => {
+      if (reduce) return;
+      svg.classList.remove('is-drawn');
+      void svg.getBoundingClientRect();
+      svg.classList.add('is-drawn');
+      const r = svg.getBoundingClientRect();
+      const cx = r.left + r.width * 0.78, cy = r.top + r.height * 0.42;
+      for (let i = 0; i < 6; i++) {
+        const el = document.createElement('span');
+        el.className = 'burst ' + (i % 2 === 0 ? 'burst-gold' : 'burst-petal');
+        const ang = -Math.PI * 0.8 + Math.random() * Math.PI * 0.9;
+        const dist = 22 + Math.random() * 28;
+        const size = i % 2 === 0 ? 3 + Math.random() * 2.5 : 5 + Math.random() * 3;
+        el.style.cssText = `left:${cx}px;top:${cy}px;width:${size}px;height:${i % 2 === 0 ? size * .8 : size * 1.4}px;` +
+          `--dx:${(Math.cos(ang) * dist).toFixed(0)}px;--dy:${(Math.sin(ang) * dist - 10).toFixed(0)}px;` +
+          `--fall:${(20 + Math.random() * 26).toFixed(0)}px;--rot:${Math.round((Math.random() - .5) * 280)}deg;--t:${(1.1 + Math.random() * .5).toFixed(2)}s`;
+        document.body.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+      }
+    });
+
+    dividers.push(svg);
+  });
+
+  if (reduce) {
+    dividers.forEach((svg) => svg.classList.add('is-drawn'));
+    return;
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-drawn');
+      io.unobserve(e.target);
+    });
+  }, { rootMargin: '0px 0px -6% 0px', threshold: 0.2 });
+
+  const invitation = document.querySelector('#invitation');
+  const start = () => dividers.forEach((svg) => io.observe(svg));
+  if (invitation && (invitation.classList.contains('revealed') || !document.querySelector('#opening'))) start();
+  else if (invitation) new MutationObserver((m, mo) => {
+    if (invitation.classList.contains('revealed')) { mo.disconnect(); setTimeout(start, 300); }
+  }).observe(invitation, { attributes: true, attributeFilter: ['class'] });
+})();
+
+// Program timeline: scroll-driven spine thread + subject-matched micro-effects on the 7 illustrations
+(() => {
+  const tl = document.querySelector('.program-block .timeline');
   if (!tl) return;
-  const items = [...tl.querySelectorAll('.tl2-item')];
+  const rows = [...tl.querySelectorAll('li')];
+  if (!rows.length) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 1) Inject scroll-driven golden-sage spine line (append so li:first-child and nth-child order stay intact)
+  const prog = document.createElement('span');
+  prog.className = 'tl-progress';
+  prog.setAttribute('aria-hidden', 'true');
+  tl.append(prog);
+
+  // 2) Add delicate subject-matched ambient effects to each of the 7 illustrations
+  if (!reduce) {
+    const addFx = (rowIdx, items) => {
+      const icon = rows[rowIdx] && rows[rowIdx].querySelector('.tl-icon');
+      if (!icon) return;
+      const fx = document.createElement('span');
+      fx.className = 'tl-fx';
+      fx.setAttribute('aria-hidden', 'true');
+      items.forEach(({ cls, css, text }) => {
+        const el = document.createElement('i');
+        el.className = cls;
+        el.style.cssText = css;
+        if (text) el.textContent = text;
+        fx.appendChild(el);
+      });
+      icon.appendChild(fx);
+    };
+
+    // 0: Ceremony (rings) — solitaire diamond glint
+    addFx(0, [
+      { cls: 'tl-glint', css: 'left:38%;top:27%;--gs:11px;--gd:3.6s;--gdel:0s' },
+      { cls: 'tl-glint', css: 'left:64%;top:50%;--gs:7px;--gd:4.4s;--gdel:-1.8s' }
+    ]);
+    // 1: Cocktail & pictorial — champagne bubbles rising above clinking coupes
+    addFx(1, [
+      { cls: 'tl-bubble', css: 'left:48%;top:34%;--bs:3.5px;--bd:2.8s;--bdel:0s;--bx:-2px' },
+      { cls: 'tl-bubble', css: 'left:54%;top:30%;--bs:2.8px;--bd:3.3s;--bdel:-1.1s;--bx:3px' },
+      { cls: 'tl-bubble', css: 'left:50%;top:24%;--bs:3px;--bd:3.6s;--bdel:-2.1s;--bx:1px' }
+    ]);
+    // 2: Dinner — warm flickering taper candle flame
+    addFx(2, [
+      { cls: 'tl-flame', css: 'left:69%;top:13%' }
+    ]);
+    // 3: Thank-you speech — champagne sparkle & soft glint
+    addFx(3, [
+      { cls: 'tl-bubble', css: 'left:36%;top:24%;--bs:3px;--bd:3.2s;--bdel:-.4s;--bx:2px' },
+      { cls: 'tl-glint', css: 'left:66%;top:42%;--gs:8px;--gd:4.2s;--gdel:-1.3s' }
+    ]);
+    // 4: Music & drinks — tiny musical notes drifting from the gramophone horn
+    addFx(4, [
+      { cls: 'tl-note', css: 'left:68%;top:22%;--bd:3.6s;--bdel:0s;--bx:4px', text: '♪' },
+      { cls: 'tl-note', css: 'left:78%;top:32%;--bd:4.1s;--bdel:-1.9s;--bx:5px', text: '♫' }
+    ]);
+    // 5: Late-night bites — soft warm aroma wisps beneath the cloche
+    addFx(5, [
+      { cls: 'tl-steam', css: 'left:28%;top:48%;--bd:3.3s;--bdel:0s' },
+      { cls: 'tl-steam', css: 'left:72%;top:52%;--bd:3.8s;--bdel:-1.6s' }
+    ]);
+    // 6: Send-off — twinkling golden sparkler tips
+    addFx(6, [
+      { cls: 'tl-glint', css: 'left:33%;top:31%;--gs:12px;--gd:2.1s;--gdel:0s' },
+      { cls: 'tl-glint', css: 'left:69%;top:35%;--gs:12px;--gd:2.3s;--gdel:-.9s' },
+      { cls: 'tl-glint', css: 'left:52%;top:22%;--gs:8px;--gd:2.7s;--gdel:-1.5s' }
+    ]);
+  }
+
+  // 3) Scroll-driven spine progress & milestone node illumination
   let ticking = false;
   const update = () => {
     ticking = false;
-    const r = tl.getBoundingClientRect(), vh = window.innerHeight;
-    const p = Math.min(Math.max((vh * 0.72 - r.top) / r.height, 0), 1);
-    tl.style.setProperty('--tl-p', p.toFixed(4));
-    const reach = r.top + r.height * p;
-    items.forEach((li) => {
-      const node = li.querySelector('.tl2-node').getBoundingClientRect();
-      if (node.top + node.height / 2 <= reach + 2) li.classList.add('on');
+    const rect = tl.getBoundingClientRect();
+    const triggerY = window.innerHeight * 0.62;
+    const raw = (triggerY - rect.top) / Math.max(rect.height, 1);
+    const pct = Math.max(0, Math.min(1, raw));
+    prog.style.setProperty('--tl-p', `${(pct * 100).toFixed(2)}%`);
+    prog.style.setProperty('--tl-tip', pct > 0.02 && pct < 0.99 ? '1' : '0');
+
+    rows.forEach((li) => {
+      const lr = li.getBoundingClientRect();
+      const mid = lr.top + lr.height * 0.5;
+      li.classList.toggle('tl-reached', mid <= triggerY + 8);
     });
   };
   const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
   update();
+})();
+
+// Bilingual language switcher (EN / 日本語), persisted in localStorage and supporting ?lang=ja
+(() => {
+  const wrap = document.querySelector('#langToggle');
+  if (!wrap) return;
+  const dict = {
+    en: {
+      pageTitle: 'Our Wedding Day — April 18, 2027',
+      openHint: 'Tap the lily seal to open',
+      openingCaption: 'Our wedding invitation',
+      eyebrow: 'Together with our families',
+      inviteTitle: 'Request the honour of your presence',
+      heroSub: 'in celebration of our marriage',
+      heroDate: 'Sunday · April 18, 2027 · 4:30 PM',
+      venueHint: 'Tap for directions',
+      dressLabel: 'Dress code',
+      dressText: 'Semi-formal<br />Light &amp; breathable',
+      weatherNote: 'The Philippines is typically hot and humid.',
+      settingLabel: 'Setting',
+      settingText: 'An intimate celebration with those dearest to us.',
+      kindNoteLabel: 'Kind note',
+      kindNoteText: 'Please arrive by 3:30 PM for welcome drinks.',
+      tl1: 'Ceremony',
+      tl2: 'Cocktail & pictorial',
+      tl3: 'Dinner',
+      tl4: 'Thank-you speech',
+      tl5: 'Music & drinks',
+      tl6: 'Late-night bites',
+      tl7: 'Send-off',
+      feelEyebrow: 'The feeling',
+      feelBody: 'Warm candlelight, ocean air, and time to simply enjoy.',
+      closingLead: 'We can’t wait to celebrate with you.',
+      rsvpNote: '<span class="mini-label">RSVP</span>Just reply <b>Yes</b> or <b>No</b> to our message.',
+      calendarBtn: 'Add the ceremony to your calendar',
+      signoff: 'With love,'
+    },
+    ja: {
+      pageTitle: '結婚式のご案内 — 2027年4月18日',
+      openHint: 'シーリングをタップして開く',
+      openingCaption: '結婚式のご案内',
+      eyebrow: '両家とともに心よりご案内申し上げます',
+      inviteTitle: 'ささやかな結婚式のひとときを<br />皆さまとご一緒できましたら幸いです',
+      heroSub: '大切な皆さまと過ごす、海辺の祝宴へ',
+      heroDate: '2027年4月18日（日） 16:30 開式',
+      venueHint: '地図を開く',
+      dressLabel: 'ドレスコード',
+      dressText: 'セミフォーマル<br />涼しく軽やかな装いで',
+      weatherNote: '<span class="jp-phrase">フィリピンは暑く湿度が高いため、</span><br /><span class="jp-phrase">通気性の良い服装がおすすめです。</span>',
+      settingLabel: '雰囲気',
+      settingText: '<span class="jp-phrase">親しい方だけの</span><span class="jp-phrase">式ですので、</span><br /><span class="jp-phrase">気張らずリラックスして</span><span class="jp-phrase">お過ごしください。</span>',
+      kindNoteLabel: 'ご案内',
+      kindNoteText: '<span class="jp-phrase">ウェルカムドリンクを</span><span class="jp-phrase">ご用意しております。</span><br /><span class="jp-phrase">15:30までに</span><span class="jp-phrase">お越しください。</span>',
+      tl1: '挙式',
+      tl2: 'カクテル＆記念撮影',
+      tl3: 'ディナー',
+      tl4: '感謝のスピーチ',
+      tl5: '音楽＆ドリンク',
+      tl6: '夜食・軽食',
+      tl7: 'お見送り',
+      feelEyebrow: '当日の雰囲気',
+      feelBody: '自然のぬくもり、柔らかなキャンドルの灯り、海風とともに、<br />大切な皆さまと過ごす穏やかな時間。',
+      closingLead: '皆さまとお祝いできる日を心より楽しみにしております。',
+      rsvpNote: '<span class="mini-label">ご出欠のご連絡</span>メッセージへ <b>出席</b> または <b>欠席</b> とご返信ください。',
+      calendarBtn: 'カレンダーに予定を追加',
+      signoff: '愛を込めて'
+    }
+  };
+
+  const applyLang = (lang) => {
+    const next = lang === 'ja' ? 'ja' : 'en';
+    currentLang = next;
+    document.documentElement.lang = next;
+    const t = dict[next];
+    document.title = t.pageTitle;
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key] !== undefined) el.textContent = t[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+      const key = el.getAttribute('data-i18n-html');
+      if (t[key] !== undefined) el.innerHTML = t[key];
+    });
+    wrap.querySelectorAll('button[data-lang]').forEach((btn) => {
+      btn.setAttribute('aria-pressed', String(btn.getAttribute('data-lang') === next));
+    });
+    updateCountdown();
+    try { localStorage.setItem('wedding_lang', next); } catch (_) {}
+  };
+
+  wrap.querySelectorAll('button[data-lang]').forEach((btn) => {
+    btn.addEventListener('click', () => applyLang(btn.getAttribute('data-lang')));
+  });
+
+  const urlLang = new URLSearchParams(location.search).get('lang');
+  let saved = null;
+  try { saved = localStorage.getItem('wedding_lang'); } catch (_) {}
+  if (urlLang === 'ja' || urlLang === 'en') applyLang(urlLang);
+  else if (saved === 'ja' || saved === 'en') applyLang(saved);
+})();
+
+// Animated single-line wedding rings flourish below "Blez & Yuki"
+(() => {
+  const svg = document.querySelector('#ringsArt');
+  if (!svg) return;
+  const paths = [...svg.querySelectorAll('.rings-path')];
+  if (!paths.length) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const prep = () => {
+    paths.forEach((p, idx) => {
+      const len = Math.ceil(p.getTotalLength ? p.getTotalLength() : 1200) + 4;
+      p.style.setProperty('--len', String(len));
+      p.style.setProperty('--draw-dur', idx === 0 ? '1.35s' : '1.45s');
+      p.style.setProperty('--draw-delay', idx === 0 ? '0s' : '1.1s');
+    });
+  };
+  prep();
+
+  if (reduce) {
+    svg.classList.add('is-drawn');
+    return;
+  }
+
+  const draw = () => {
+    svg.classList.remove('is-drawn');
+    void svg.getBoundingClientRect();
+    requestAnimationFrame(() => svg.classList.add('is-drawn'));
+  };
+
+  svg.addEventListener('click', draw);
+
+  const invitation = document.querySelector('#invitation');
+  if (!invitation || invitation.classList.contains('revealed')) {
+    setTimeout(draw, 350);
+  } else {
+    const mo = new MutationObserver(() => {
+      if (invitation.classList.contains('revealed')) {
+        mo.disconnect();
+        setTimeout(draw, 420);
+      }
+    });
+    mo.observe(invitation, { attributes: true, attributeFilter: ['class'] });
+  }
 })();

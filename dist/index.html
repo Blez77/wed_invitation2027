@@ -8,8 +8,8 @@
   <title>Our Wedding Day — April 18, 2027</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Hurricane&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=91" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Hurricane&family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@1,400&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=103" />
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -65,107 +65,127 @@
           <img class="fe-seal-img" src="assets/calla-lily-wax-seal-pearl.png" width="721" height="655" alt="" />
         </button>
       </div>
-      <p class="open-hint">Tap the lily seal to open</p>
-      <p class="opening-caption">Our wedding invitation</p>
+      <p class="open-hint" data-i18n="openHint">Tap the lily seal to open</p>
+      <p class="opening-caption" data-i18n="openingCaption">Our wedding invitation</p>
     </section>
 
     <section class="invitation onepage" id="invitation" aria-labelledby="inviteTitle">
       <header class="hero" id="foldCard">
-        <div class="hero-art">
+        <div class="hero-art" id="heroArt">
           <div class="hero-fall" id="heroFall" aria-hidden="true"></div>
-          <img src="assets/prive-by-the-sea-illustrated.png" alt="Illustrated view of Prive by the Sea with its balconies and pool" />
+          <div class="hero-stage">
+            <img class="hero-poster" src="assets/prive-by-the-sea-illustrated.png?v=10" alt="Illustrated view of Prive by the Sea alive with our wedding celebration, food stall, drink station, and guests toasting on the balconies and by the pool" />
+            <div class="venue-life" id="venueLife" aria-hidden="true"></div>
+          </div>
         </div>
         <div class="hero-copy reveal stagger">
-          <p class="eyebrow">Together with our families</p>
-          <p class="hero-names hero-names-serif">Yuki <em>&amp;</em> Blez</p>
-          <div class="rings-art rings-bond" role="img" aria-label="Two wedding rings drawn in a single flowing line"><span class="rb-rings"></span><span class="rb-line"></span></div>
-          <h2 id="inviteTitle">Request the honour of your presence</h2>
-          <p class="hero-sub">in celebration of our marriage</p>
+          <p class="eyebrow" data-i18n="eyebrow">Together with our families</p>
+          <p class="hero-names">Yuki <em class="amp">&amp;</em> Blez</p>
+          <svg class="rings-art" id="ringsArt" viewBox="0 0 630 110" width="630" height="110" role="img" aria-label="Two wedding rings drawn in a single flowing line">
+            <path class="rings-path rings-main" d="M 14 66 C 24 94, 56 92, 86 76 C 118 59, 148 56, 150 76 C 151 94, 137 101, 132 88 C 127 75, 144 74, 168 74 C 198 74, 218 60, 232 46 C 246 30, 280 14, 314 14 C 340 14, 348 34, 332 54 C 314 76, 272 92, 246 88 C 225 84, 224 62, 234 45 C 248 25, 290 12, 322 18 C 334 21, 334 34, 314 44 C 288 57, 246 66, 234 56 C 228 50, 242 40, 266 36" />
+            <path class="rings-path rings-second" d="M 296 46 C 284 52, 284 74, 298 84 C 318 96, 368 96, 392 80 C 412 67, 412 48, 396 39 C 374 28, 324 28, 300 41 C 284 50, 294 64, 326 67 C 358 70, 394 62, 402 52 C 406 44, 384 34, 348 34 C 314 34, 292 44, 294 56 C 296 66, 326 60, 356 60 C 378 60, 392 68, 410 76 C 436 86, 464 74, 490 62 C 514 52, 526 64, 520 76 C 514 84, 510 74, 518 66 C 530 56, 558 60, 580 72 C 596 80, 610 76, 622 66" />
+            <g class="rings-glints" aria-hidden="true">
+              <path class="rings-glint rg-1" d="M 314 7 L 315.8 12.2 L 321 14 L 315.8 15.8 L 314 21 L 312.2 15.8 L 307 14 L 312.2 12.2 Z" />
+              <path class="rings-glint rg-2" d="M 389 29 L 390.4 33.1 L 394.5 34.5 L 390.4 35.9 L 389 40 L 387.6 35.9 L 383.5 34.5 L 387.6 33.1 Z" />
+            </g>
+          </svg>
+          <h2 id="inviteTitle" data-i18n-html="inviteTitle">Request the honour of your presence</h2>
+          <p class="hero-sub" data-i18n="heroSub">in celebration of our marriage</p>
           <div class="ornament seal-ornament"><span></span><img src="assets/calla-lily-wax-seal-pearl.png" width="721" height="655" alt="" /><span></span></div>
-          <time class="hero-date" datetime="2027-04-18T16:30:00+08:00">Sunday · April 18, 2027 · 4:30 PM</time>
+          <time class="hero-date" datetime="2027-04-18T16:30:00+08:00" data-i18n="heroDate">Sunday · April 18, 2027 · 4:30 PM</time>
           <a class="venue-map-link" href="https://www.google.com/maps/place/Priv%C3%A9+By+The+Sea/@10.3016617,124.0170804,243m/data=!3m1!1e3!4m9!3m8!1s0x33a997e6fe064c07:0x2557ac5f7696a564!5m2!4m1!1i2!8m2!3d10.3018948!4d124.0174525!16s%2Fg%2F11l74b_vs5?entry=ttu&amp;g_ep=EgoyMDI2MTExNS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" aria-label="Open Prive by the Sea in Google Maps">
             <span>Prive by the Sea</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6-5.15 6-11a6 6 0 1 0-12 0c0 5.85 6 11 6 11Z"/><circle cx="12" cy="10" r="2.25"/></svg>
-            <small class="venue-hint">Tap for directions</small>
+            <small class="venue-hint" data-i18n="venueHint">Tap for directions</small>
           </a>
         </div>
       </header>
 
       <section class="block countdown-block reveal stagger" aria-labelledby="countTitle">
         <h2 class="script-title" id="countTitle">COUNTING <i>the</i> DAYS</h2>
-        <div class="clock" id="clock" aria-live="off">
-          <div><b id="cdDays">0</b><span>Days</span></div>
-          <div><b id="cdHours">00</b><span>Hours</span></div>
-          <div><b id="cdMins">00</b><span>Minutes</span></div>
-          <div><b id="cdSecs">00</b><span>Seconds</span></div>
+        <div class="clock clock-cards" id="clock" aria-live="off">
+          <div class="cal-card" data-unit="months">
+            <span class="cal-pins" aria-hidden="true"><i></i><i></i></span>
+            <div class="cal-face">
+              <div class="cal-num-stage">
+                <b id="cdMonths">0</b>
+                <span class="cal-leaf" aria-hidden="true"></span>
+              </div>
+              <span class="cal-rule" aria-hidden="true"></span>
+              <span class="cal-label" id="lblMonths">Months</span>
+            </div>
+          </div>
+          <i class="cal-amp" aria-hidden="true">&amp;</i>
+          <div class="cal-card" data-unit="days">
+            <span class="cal-pins" aria-hidden="true"><i></i><i></i></span>
+            <div class="cal-face">
+              <div class="cal-num-stage">
+                <b id="cdDays">0</b>
+                <span class="cal-leaf" aria-hidden="true"></span>
+              </div>
+              <span class="cal-rule" aria-hidden="true"></span>
+              <span class="cal-label" id="lblDays">Days</span>
+            </div>
+          </div>
         </div>
         <p class="countdown" id="countdown"></p>
       </section>
 
       <section class="block details-block reveal stagger" aria-labelledby="detailsTitle">
         <h2 class="script-title" id="detailsTitle"><i>the</i> DETAILS</h2>
-        <div class="detail-block">
-          <span class="mini-label">Dress code</span>
-          <p>Semi-formal<br />Light &amp; breathable</p>
-          <p class="weather-note">The Philippines is typically hot and humid.</p>
+        <div class="detail-block detail-dress">
+          <img class="detail-art detail-art-dress" src="assets/dt-attire.png?v=1" width="140" height="140" alt="Hand-drawn illustration of a linen suit and breezy midi dress" loading="lazy" />
+          <span class="mini-label" data-i18n="dressLabel">Dress code</span>
+          <p class="detail-lead" data-i18n-html="dressText">Semi-formal<br />Light &amp; breathable</p>
+          <p class="weather-note" data-i18n-html="weatherNote">The Philippines is typically hot and humid.</p>
         </div>
-        <div class="detail-block">
-          <span class="mini-label">Setting</span>
-          <p class="one-line">An intimate celebration with those dearest to us.</p>
-        </div>
-        <div class="detail-block">
-          <span class="mini-label">Kind note</span>
-          <p>Please arrive by 3:30 PM for welcome drinks.</p>
+        <div class="details-pair">
+          <div class="detail-block">
+            <img class="detail-art" src="assets/dt-setting.png?v=1" width="140" height="140" alt="Hand-drawn illustration of an intimate coastal wedding arch" loading="lazy" />
+            <span class="mini-label" data-i18n="settingLabel">Setting</span>
+            <p data-i18n-html="settingText">An intimate celebration with those dearest to us.</p>
+          </div>
+          <div class="detail-block">
+            <img class="detail-art" src="assets/dt-welcome.png?v=1" width="140" height="140" alt="Hand-drawn illustration of a chilled welcome cocktail" loading="lazy" />
+            <span class="mini-label" data-i18n="kindNoteLabel">Kind note</span>
+            <p data-i18n-html="kindNoteText">Please arrive by 3:30 PM for welcome drinks.</p>
+          </div>
         </div>
       </section>
 
       <section class="block program-block reveal" aria-labelledby="programTitle">
         <h2 class="script-title" id="programTitle"><i>the</i> PROGRAM</h2>
-        <ol class="tl2" id="timeline2">
-          <li class="tl2-item tl2-left">
-            <div class="tl2-text"><time>4:30<small> PM</small></time><span class="tl2-label">Ceremony</span></div>
-            <div class="tl2-node"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="12" cy="19" r="6.5"/><circle cx="20" cy="19" r="6.5"/><path d="M9 8l3-3 3 3-3 3.5z"/></svg></div>
-          </li>
-          <li class="tl2-item tl2-right">
-            <div class="tl2-text"><time>5:00<small> PM</small></time><span class="tl2-label">Cocktail &amp; pictorial</span></div>
-            <div class="tl2-node"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 6h8c0 5-1.5 8-4 8s-4-3-4-8zM10 14v10M6.5 24h7"/><path d="M21 5h3v4c2 1 2.5 2.5 2.5 4v12h-8V13c0-1.5.5-3 2.5-4z"/></svg></div>
-          </li>
-          <li class="tl2-item tl2-left">
-            <div class="tl2-text"><time>6:15<small> PM</small></time><span class="tl2-label">Dinner</span></div>
-            <div class="tl2-node"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="7.5"/><circle cx="16" cy="16" r="4.5"/><path d="M4 6v20M2.5 6v5c0 1 .7 1.6 1.5 1.6S5.5 12 5.5 11V6M28 26V6c-1.6 1.2-2.2 4-2.2 7.5H28"/></svg></div>
-          </li>
-          <li class="tl2-item tl2-right">
-            <div class="tl2-text"><time>7:00<small> PM</small></time><span class="tl2-label">Thank-you speech</span></div>
-            <div class="tl2-node"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="21" cy="9" r="5"/><path d="M17.5 12.5L6 25l1.5 1.5L20 15M9 22l1.5 1.5"/></svg></div>
-          </li>
-          <li class="tl2-item tl2-left">
-            <div class="tl2-text"><time>7:15<small> PM</small></time><span class="tl2-label">Music &amp; drinks</span></div>
-            <div class="tl2-node"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12 23V8l13-3v15"/><ellipse cx="9" cy="23.5" rx="3.2" ry="2.4"/><ellipse cx="22" cy="20.5" rx="3.2" ry="2.4"/><path d="M12 12l13-3"/><path d="M5 6v4M3 8h4" stroke-width="1.1"/></svg></div>
-          </li>
-          <li class="tl2-item tl2-right">
-            <div class="tl2-text"><time>9:00<small> PM</small></time><span class="tl2-label">Late-night bites</span></div>
-            <div class="tl2-node"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4.5 17h23c0 5.5-5 9.5-11.5 9.5S4.5 22.5 4.5 17Z"/><path d="M10 27.5h12"/><path d="M11 13c-1.3-1.6 1.3-3.2 0-5M16 13c-1.3-1.6 1.3-3.2 0-5M21 13c-1.3-1.6 1.3-3.2 0-5"/></svg></div>
-          </li>
-          <li class="tl2-item tl2-left">
-            <div class="tl2-text"><time>10:30<small> PM</small></time><span class="tl2-label">Send-off</span></div>
-            <div class="tl2-node"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 27L16 16"/><path d="M19 13l3-7M19 13l7-3M19 13l7 4M19 13l2 8M19 13l-5-6M19 13L22 19M15 9l-1-3M24 13h3"/></svg></div>
-          </li>
+        <ol class="timeline">
+          <li><div class="tl-text"><time>4:30<small>PM</small></time><b data-i18n="tl1">Ceremony</b></div><i class="tl-icon"><img src="assets/tl-ceremony.png?v=1" width="120" height="120" alt="" loading="lazy" /></i></li>
+          <li><div class="tl-text"><time>5:00<small>PM</small></time><b data-i18n="tl2">Cocktail &amp; pictorial</b></div><i class="tl-icon"><img src="assets/tl-cocktail.png?v=1" width="120" height="120" alt="" loading="lazy" /></i></li>
+          <li><div class="tl-text"><time>6:15<small>PM</small></time><b data-i18n="tl3">Dinner</b></div><i class="tl-icon"><img src="assets/tl-dinner.png?v=1" width="120" height="120" alt="" loading="lazy" /></i></li>
+          <li><div class="tl-text"><time>7:00<small>PM</small></time><b data-i18n="tl4">Thank-you speech</b></div><i class="tl-icon"><img src="assets/tl-speech.png?v=1" width="120" height="120" alt="" loading="lazy" /></i></li>
+          <li><div class="tl-text"><time>7:15<small>PM</small></time><b data-i18n="tl5">Music &amp; drinks</b></div><i class="tl-icon"><img src="assets/tl-music.png?v=1" width="120" height="120" alt="" loading="lazy" /></i></li>
+          <li><div class="tl-text"><time>9:00<small>PM</small></time><b data-i18n="tl6">Late-night bites</b></div><i class="tl-icon"><img src="assets/tl-bites.png?v=1" width="120" height="120" alt="" loading="lazy" /></i></li>
+          <li><div class="tl-text"><time>10:30<small>PM</small></time><b data-i18n="tl7">Send-off</b></div><i class="tl-icon"><img src="assets/tl-sendoff.png?v=1" width="120" height="120" alt="" loading="lazy" /></i></li>
         </ol>
       </section>
 
       <section class="block story reveal stagger" aria-labelledby="feelTitle">
-        <p class="eyebrow">The feeling</p>
+        <p class="eyebrow" data-i18n="feelEyebrow">The feeling</p>
         <h2 class="script-title" id="feelTitle">ROMANTIC <i>&amp;</i> RELAXED</h2>
-        <p>Warm candlelight, ocean air, and time to simply enjoy.</p>
+        <p data-i18n-html="feelBody">Warm candlelight, ocean air, and time to simply enjoy.</p>
       </section>
 
       <section class="block rsvp reveal stagger" id="closing" aria-labelledby="closingTitle">
         <h2 class="script-title" id="closingTitle">SEE YOU <i>there</i></h2>
-        <p>We can’t wait to celebrate with you.</p>
-        <p class="rsvp-note"><span class="mini-label">RSVP</span>Just reply <b>Yes</b> or <b>No</b> to our message.</p>
-        <button class="calendar-button" id="calendarButton">Add the ceremony to your calendar</button>
+        <p data-i18n="closingLead">We can’t wait to celebrate with you.</p>
+        <p class="rsvp-note" data-i18n-html="rsvpNote"><span class="mini-label">RSVP</span>Just reply <b>Yes</b> or <b>No</b> to our message.</p>
+        <button class="calendar-button" id="calendarButton" type="button">
+          <svg class="cal-btn-ico" viewBox="0 0 20 20" aria-hidden="true">
+            <rect x="2.5" y="4" width="15" height="13.5" rx="2.2" />
+            <path d="M2.5 8h15M6.5 2.2v3M13.5 2.2v3" />
+            <text x="10" y="14.8" text-anchor="middle">18</text>
+          </svg>
+          <span data-i18n="calendarBtn">Add the ceremony to your calendar</span>
+        </button>
         <button class="closing-seal-btn" id="closingSeal" type="button" aria-label="A little surprise"><img class="closing-seal" src="assets/calla-lily-wax-seal-pearl.png" width="721" height="655" alt="" /></button>
-        <p class="signoff"><i>With love,</i><span>Yuki <em>&amp;</em> Blez</span></p>
+        <p class="signoff"><i data-i18n="signoff">With love,</i><span>Yuki <em>&amp;</em> Blez</span></p>
         <p class="card-foot">18 · 04 · 2027</p>
       </section>
       <footer class="couple-footer" id="coupleFooter" aria-label="Yuki and Blez, tied by a red string">
@@ -186,9 +206,14 @@
     </section>
   </main>
 
+  <div class="lang-toggle" id="langToggle" role="group" aria-label="Language switcher">
+    <button type="button" data-lang="en" aria-pressed="true">EN</button>
+    <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+  </div>
+
   <button class="music-toggle" id="musicToggle" type="button" aria-label="Pause music" aria-pressed="true" hidden>
     <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
   </button>
-  <script src="script.js?v=31"></script>
+  <script src="script.js?v=53"></script>
 </body>
 </html>

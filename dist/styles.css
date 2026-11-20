@@ -2245,3 +2245,6 @@ html[lang="ja"] .details-pair .detail-block p {
 .jp-phrase {
   display: inline-block;
 }
+
+/* Same-venue note under the directions link */
+.hero .venue-note { margin: 10px auto 0; font: italic 400 .98rem/1.5 "Cormorant Garamond", serif !important; letter-spacing: .02em; color: #6c6a60; text-align: center; }
